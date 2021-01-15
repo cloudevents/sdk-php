@@ -1,0 +1,32 @@
+{
+    "name": "cloudevents/sdk-php",
+    "description": "CloudEvents SDK",
+    "type": "library",
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "CloudEvents\\": "src/CloudEvents/"
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CloudEvents\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^9.5",
+        "nunomaduro/collision": "^5.2"
+    },
+    "scripts": {
+        "lint": "./vendor/bin/phpcs --standard=PSR12 ./src",
+        "lint-fix": "./vendor/bin/phpcbf --standard=PSR12 ./src",
+        "tests": "./vendor/bin/phpunit"
+    }
+}

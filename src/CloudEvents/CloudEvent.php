@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace CloudEvents;
 
-class Event
+class CloudEvent
 {
     public const VERSION_1_0 = '1.0';
+
+    private string $id;
+    private string $source;
+    private string $specversion;
+    private string $type;
+
+    private $data;
 
     public function __construct()
     {
@@ -18,7 +25,7 @@ class Event
         return $this->data;
     }
 
-    public function setData(string $data): Event
+    public function setData(string $data): CloudEvent
     {
         $this->data = $data;
 
@@ -30,7 +37,7 @@ class Event
         return $this->id;
     }
 
-    public function setId(string $id): Event
+    public function setId(string $id): CloudEvent
     {
         $this->id = $id;
 
@@ -42,7 +49,7 @@ class Event
         return $this->source;
     }
 
-    public function setSource(string $source): Event
+    public function setSource(string $source): CloudEvent
     {
         $this->source = $source;
 
@@ -54,7 +61,7 @@ class Event
         return $this->specVersion;
     }
 
-    public function setSpecVersion(string $specVersion): Event
+    public function setSpecVersion(string $specVersion): CloudEvent
     {
         $this->specVersion = $specVersion;
 
@@ -66,7 +73,7 @@ class Event
         return $this->type;
     }
 
-    public function setType(string $type): Event
+    public function setType(string $type): CloudEvent
     {
         $this->type = $type;
 

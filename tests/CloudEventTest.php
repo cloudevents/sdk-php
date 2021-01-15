@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CloudEvents\Tests;
 
-use CloudEvents\Event;
+use CloudEvents\CloudEvent;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
@@ -15,8 +15,8 @@ class EventTest extends TestCase
     public function testDefaultSpecVersion(): void
     {
         $this->assertEquals(
-            Event::VERSION_1_0,
-            (new Event())->getSpecVersion()
+            CloudEvent::VERSION_1_0,
+            (new CloudEvent())->getSpecVersion()
         );
     }
 
@@ -41,7 +41,7 @@ class EventTest extends TestCase
         string $setter,
         $value
     ): void {
-        $event = (new Event())->{$setter}($value);
+        $event = (new CloudEvent())->{$setter}($value);
 
         $this->assertEquals($value, $event->{$getter}());
     }

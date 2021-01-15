@@ -19,10 +19,10 @@ composer install cloudevents/php-sdk
 
 ```php
 use \CloudEvents\Client;
-use \CloudEvents\Event;
+use \CloudEvents\CloudEvent;
 use \CloudEvents\Request;
 
-$event = (new Event())
+$event = (new CloudEvent())
     // The current implementation requires you to maintain your own id.
     ->setId('1n6bFxDMHZFChlI4TVI9tdzphB9')
     ->setSource('/examples/php-sdk')
@@ -38,7 +38,7 @@ Note that the `CloudEvents\Client` implements the [PSR-18](https://www.php-fig.o
 ## Serialize/Deserialize a CloudEvent
 
 ```php
-$event = (new Event())
+$event = (new CloudEvent())
     // The current implementation requires you to maintain your own id.
     ->setId('1n6bFxDMHZFChlI4TVI9tdzphB9')
     ->setSource('/examples/php-sdk')

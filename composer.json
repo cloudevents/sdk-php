@@ -3,6 +3,10 @@
     "description": "CloudEvents SDK",
     "type": "library",
     "license": "Apache-2.0",
+    "support": {
+        "issues": "https://github.com/cloudevents/sdk-php/issues",
+        "source": "https://github.com/cloudevents/sdk-php"
+    },
     "require": {
         "php": ">=7.4"
     },
@@ -28,5 +32,8 @@
         "lint": "./vendor/bin/phpcs --standard=PSR12 ./src",
         "lint-fix": "./vendor/bin/phpcbf --standard=PSR12 ./src",
         "tests": "./vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

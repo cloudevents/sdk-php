@@ -17,9 +17,11 @@ composer install cloudevents/php-sdk
 
 ## Send your first CloudEvent
 
+Note, this is just the desired API at this point and doesn't reflect the functionality of this SDK yet.
+
 ```php
 use \CloudEvents\Client;
-use \CloudEvents\CloudEvent;
+use \CloudEvents\V1\CloudEvent;
 use \CloudEvents\Request;
 
 $event = (new CloudEvent())
@@ -38,6 +40,8 @@ Note that the `CloudEvents\Client` implements the [PSR-18](https://www.php-fig.o
 ## Serialize/Deserialize a CloudEvent
 
 ```php
+use \CloudEvents\V1\CloudEvent;
+
 $event = (new CloudEvent())
     // The current implementation requires you to maintain your own id.
     ->setId('1n6bFxDMHZFChlI4TVI9tdzphB9')

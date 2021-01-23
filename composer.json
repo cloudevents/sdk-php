@@ -21,7 +21,8 @@
         }
     },
     "require": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-json": "*"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.2",

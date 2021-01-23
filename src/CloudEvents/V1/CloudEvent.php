@@ -8,8 +8,6 @@ use DateTimeInterface;
 
 class CloudEvent implements CloudEventInterface
 {
-    private const SPEC_VERSION = '1.0';
-
     private string $id;
     private string $source;
     private string $type;

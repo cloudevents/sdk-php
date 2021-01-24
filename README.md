@@ -55,6 +55,21 @@ $deserializedEvent = Event::fromJson($serializedEvent);
 
 ```
 
+## Testing
+
+You can use `composer` to build and run test environments when contributing.
+
+```
+$ composer run -l
+
+scripts:
+  lint          Show all current linting errors according to PSR12
+  lint-fix      Show and fix all current linting errors according to PSR12
+  tests         Run all tests locally
+  tests-build   Build containers to test against supported PHP versions
+  tests-docker  Run tests within supported PHP version containers
+```
+
 ## Community
 
 - There are bi-weekly calls immediately following the [Serverless/CloudEvents

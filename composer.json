@@ -31,7 +31,22 @@
     "scripts": {
         "lint": "./vendor/bin/phpcs --standard=PSR12 ./src ./tests",
         "lint-fix": "./vendor/bin/phpcbf --standard=PSR12 ./src ./tests",
-        "tests": "./vendor/bin/phpunit"
+        "tests": "./vendor/bin/phpunit",
+        "tests-build": [
+            "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:7.4-tests -f hack/7.4.Dockerfile hack",
+            "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.0-tests -f hack/8.0.Dockerfile hack"
+        ],
+        "tests-docker": [
+            "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:7.4-tests --coverage-html=coverage",
+            "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.0-tests"
+        ]
+    },
+    "scripts-descriptions": {
+        "lint": "Show all current linting errors according to PSR12",
+        "lint-fix": "Show and fix all current linting errors according to PSR12",
+        "tests": "Run all tests locally",
+        "tests-build": "Build containers to test against supported PHP versions",
+        "tests-docker": "Run tests within supported PHP version containers"
     },
     "config": {
         "sort-packages": true

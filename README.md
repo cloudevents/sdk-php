@@ -40,6 +40,7 @@ Note that the `CloudEvents\Client` implements the [PSR-18](https://www.php-fig.o
 ## Serialize/Deserialize a CloudEvent
 
 ```php
+use CloudEvents\Serializers\JsonSerializer;
 use \CloudEvents\V1\CloudEvent;
 
 $event = (new CloudEvent())
@@ -49,10 +50,11 @@ $event = (new CloudEvent())
     ->setType('com.example.type')
     ->setData(json_encode(['example' => 'first-event']));
 
-// via class methods
-$serializedEvent = $event->toJson(); // or Event::toJson($event);
-$deserializedEvent = Event::fromJson($serializedEvent);
+// JSON serialization
+$serializer = new JsonSerializer();
+$serializer->serialize($event);
 
+// TODO: deserilization
 ```
 
 ## Testing

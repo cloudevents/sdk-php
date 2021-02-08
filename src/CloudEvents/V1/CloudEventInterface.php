@@ -6,6 +6,8 @@ namespace CloudEvents\V1;
 
 interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 {
+    public const SPEC_VERSION = '1.0';
+
     public function getId(): string;
 
     public function getSource(): string;

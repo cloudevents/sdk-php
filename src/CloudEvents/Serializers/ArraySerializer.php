@@ -6,11 +6,15 @@ use CloudEvents\CloudEventInterface;
 use CloudEvents\Serializers\Exceptions\UnsupportedEventSpecVersionException;
 use CloudEvents\V1\CloudEventInterface as V1CloudEventInterface;
 use DateTimeInterface;
+use DateTimeZone;
 
 use function array_merge;
 
 class ArraySerializer
 {
+    private const DATETIME_FORMAT = 'Y-m-d\TH:i:s\Z';
+    private const DATETIME_ZONE = 'UTC';
+
     /**
      * @throws UnsupportedEventSpecVersionException
      * @throws \JsonException
@@ -46,7 +50,9 @@ class ArraySerializer
 
     private function formatTime(?DateTimeInterface $time): ?string
     {
-        return $time === null ? null : $time->format(DATE_RFC3339);
+        return $time === null
+            ? null
+            : $time->setTimezone(new DateTimeZone(self::DATETIME_ZONE))->format(self::DATETIME_FORMAT);
     }
 
     /**

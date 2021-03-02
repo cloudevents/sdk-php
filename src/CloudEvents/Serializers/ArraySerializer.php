@@ -3,27 +3,33 @@
 namespace CloudEvents\Serializers;
 
 use CloudEvents\CloudEventInterface;
+use CloudEvents\Serializers\Exceptions\MissingPayloadAttributeException;
 use CloudEvents\Serializers\Exceptions\UnsupportedEventSpecVersionException;
+use CloudEvents\Serializers\Formatters\Formatter;
+use CloudEvents\Serializers\Formatters\FormatterInterface;
 use CloudEvents\V1\CloudEventInterface as V1CloudEventInterface;
+use CloudEvents\V1\CloudEvent;
 use DateTimeInterface;
 use DateTimeZone;
 
-use function array_merge;
-
 class ArraySerializer
 {
-    private const DATETIME_FORMAT = 'Y-m-d\TH:i:s\Z';
-    private const DATETIME_ZONE = 'UTC';
+    protected FormatterInterface $formatter;
+
+    public function __construct(FormatterInterface $formatter = null)
+    {
+        $this->formatter = $formatter ?? new Formatter();
+    }
 
     /**
      * @throws UnsupportedEventSpecVersionException
-     * @throws \JsonException
      */
     public function serialize(CloudEventInterface $cloudEvent): array
     {
-        $payload = $this->createPayload($cloudEvent);
-        
-        return array_merge($payload, $this->formatData($cloudEvent->getData()));
+        return array_merge(
+            $this->encodePayload($cloudEvent),
+            $this->formatter->encodeData($cloudEvent->getData())
+        );
     }
 
     /**
@@ -31,47 +37,71 @@ class ArraySerializer
      *
      * @throws UnsupportedEventSpecVersionException
      */
-    protected function createPayload(CloudEventInterface $cloudEvent): array
+    protected function encodePayload(CloudEventInterface $cloudEvent): array
     {
         if ($cloudEvent instanceof V1CloudEventInterface) {
             return [
                 'specversion' => $cloudEvent->getSpecVersion(),
                 'id' => $cloudEvent->getId(),
+                'source' => $cloudEvent->getSource(),
                 'type' => $cloudEvent->getType(),
                 'datacontenttype' => $cloudEvent->getDataContentType(),
                 'dataschema' => $cloudEvent->getDataSchema(),
                 'subject' => $cloudEvent->getSubject(),
-                'time' => $this->formatTime($cloudEvent->getTime()),
+                'time' => $this->formatter->encodeTime($cloudEvent->getTime()),
             ];
         }
 
         throw new UnsupportedEventSpecVersionException();
     }
 
-    private function formatTime(?DateTimeInterface $time): ?string
+    /**
+     * @throws UnsupportedEventSpecVersionException
+     * @throws MissingPayloadAttributeException
+     */
+    public function deserialize(array $payload): CloudEventInterface
     {
-        return $time === null
-            ? null
-            : $time->setTimezone(new DateTimeZone(self::DATETIME_ZONE))->format(self::DATETIME_FORMAT);
+        return $this->decodePayload($payload)->setData($this->formatter->decodeData($payload));
     }
 
     /**
-     * @param mixed|null $data
+     * Get a CloudEvent from a JSON-serializable array representation.
+     *
+     * @throws UnsupportedEventSpecVersionException
+     * @throws MissingPayloadAttributeException
      */
-    private function formatData($data): array
+    protected function decodePayload(array $payload): CloudEventInterface
     {
-        if ($this->isBinary($data)) {
-            return ['data_base64' => base64_encode($data)];
+        if ($payload['specversion'] ?? null === V1CloudEventInterface::SPEC_VERSION) {
+            if (!isset($payload['id']) || !isset($payload['source']) || !isset($payload['type'])) {
+                throw new MissingPayloadAttributeException();
+            }
+
+            $cloudEvent = new CloudEvent(
+                $payload['id'],
+                $payload['source'],
+                $payload['type']
+            );
+
+            if (isset($payload['datacontenttype'])) {
+                $cloudEvent->setDataContentType($payload['datacontenttype']);
+            }
+
+            if (isset($payload['dataschema'])) {
+                $cloudEvent->setDataSchema($payload['dataschema']);
+            }
+
+            if (isset($payload['subject'])) {
+                $cloudEvent->setSubject($payload['subject']);
+            }
+
+            if (isset($payload['time'])) {
+                $cloudEvent->setTime($this->formatter->decodeTime($payload['time']));
+            }
+
+            return $cloudEvent;
         }
 
-        return ['data' => $data];
-    }
-
-    /**
-     * @param mixed|null $data
-     */
-    private function isBinary($data): bool
-    {
-        return is_string($data) && !preg_match('//u', $data);
+        throw new UnsupportedEventSpecVersionException();
     }
 }

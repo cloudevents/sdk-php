@@ -22,4 +22,14 @@ class JsonSerializer
     {
         return json_encode($this->arraySerializer->serialize($cloudEvent), JSON_THROW_ON_ERROR);
     }
+
+    /**
+     * @throws UnsupportedEventSpecVersionException
+     * @throws MissingPayloadAttributeException
+     * @throws \JsonException
+     */
+    public function deserialize(string $payload): CloudEventInterface
+    {
+        return $this->arraySerializer->deserialize(json_decode($payload, true, 512, JSON_THROW_ON_ERROR));
+    }
 }

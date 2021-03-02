@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CloudEvents\V1;
 
+use DateTimeInterface;
+
 interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 {
     public const SPEC_VERSION = '1.0';
@@ -20,7 +22,7 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 
     public function getSubject(): ?string;
 
-    public function getTime(): ?\DateTimeInterface;
+    public function getTime(): ?DateTimeInterface;
 
     /**
      * @return mixed|null

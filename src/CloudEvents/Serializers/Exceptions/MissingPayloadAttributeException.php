@@ -4,10 +4,10 @@ namespace CloudEvents\Serializers\Exceptions;
 
 use Throwable;
 
-class UnsupportedEventSpecVersionException extends SerializationException
+class MissingPayloadAttributeException extends SerializationException
 {
     public function __construct(
-        string $message = 'Unsupported CloudEvent spec version.',
+        string $message = 'Missing payload attribute.',
         int $code = 0,
         Throwable $previous = null
     ) {

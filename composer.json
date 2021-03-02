@@ -22,7 +22,9 @@
     },
     "require": {
         "php": ">=7.4",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pcre": "*",
+        "symfony/polyfill-php80": "^1.17"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.2",

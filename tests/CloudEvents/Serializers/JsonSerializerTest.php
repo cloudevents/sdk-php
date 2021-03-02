@@ -40,7 +40,7 @@ class JsonSerializerTest extends TestCase
                     'datacontenttype' => 'application/json',
                     'dataschema' => 'com.example/schema',
                     'subject' => 'larger-context',
-                    'time' => '2018-04-05T17:31:00+00:00',
+                    'time' => '2018-04-05T17:31:00Z',
                     'data' => [
                         'key' => 'value',
                     ]

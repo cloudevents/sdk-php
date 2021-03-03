@@ -26,10 +26,10 @@ class ArraySerializer
      */
     public function serialize(CloudEventInterface $cloudEvent): array
     {
-        return array_merge(
+        return array_filter(array_merge(
             $this->encodePayload($cloudEvent),
             $this->formatter->encodeData($cloudEvent->getData())
-        );
+        ), fn ($attr) => $attr !== null);
     }
 
     /**

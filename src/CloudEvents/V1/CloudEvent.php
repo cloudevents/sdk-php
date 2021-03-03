@@ -89,7 +89,7 @@ class CloudEvent implements CloudEventInterface
     }
 
     /**
-     * @param mixed $data
+     * @param mixed|null $data
      */
     public function setData($data): CloudEvent
     {

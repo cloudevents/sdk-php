@@ -65,9 +65,7 @@ class Formatter implements FormatterInterface
             return $data['data'];
         }
 
-        throw new ValueError(
-            \sprintf('%s::decodeData(): Argument #1 ($data) missing data or data_base64 attributes', self::class)
-        );
+        return null;
     }
 
     /**

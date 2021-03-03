@@ -51,6 +51,35 @@ class ArraySerializerTest extends TestCase
     }
 
     /**
+     * @covers ::serialize
+     */
+    public function testSerializeWithUnsetAttributes(): void
+    {
+        /** @var CloudEventInterface|Stub $event */
+        $event = $this->createStub(CloudEventInterface::class);
+        $event->method('getSpecVersion')->willReturn('1.0');
+        $event->method('getId')->willReturn('1234-1234-1234');
+        $event->method('getSource')->willReturn('/var/data');
+        $event->method('getType')->willReturn('com.example.someevent');
+        $event->method('getSubject')->willReturn('larger-context');
+        $event->method('getTime')->willReturn(new DateTimeImmutable('2018-04-05T17:31:00Z'));
+
+        $formatter = new ArraySerializer();
+
+        $this->assertSame(
+            [
+                'specversion' => '1.0',
+                'id' => '1234-1234-1234',
+                'source' => '/var/data',
+                'type' => 'com.example.someevent',
+                'subject' => 'larger-context',
+                'time' => '2018-04-05T17:31:00Z',
+            ],
+            $formatter->serialize($event)
+        );
+    }
+
+    /**
      * @covers ::deserialize
      */
     public function testDeserialize(): void

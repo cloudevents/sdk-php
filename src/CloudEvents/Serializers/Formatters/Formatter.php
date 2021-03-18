@@ -29,11 +29,9 @@ class Formatter implements FormatterInterface
     {
         $parsed = DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
 
-        if($parsed) {
-            return $parsed;
-        }
-        
-        return null;
+        return $parsed === false
+            ? null
+            : $parsed;
     }
 
     /**

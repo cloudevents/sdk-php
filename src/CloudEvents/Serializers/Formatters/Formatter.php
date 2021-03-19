@@ -27,11 +27,9 @@ class Formatter implements FormatterInterface
 
     public function decodeTime(?string $time): ?DateTimeInterface
     {
-        $parsed = DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
-
-        return $parsed === false
+        return $time === null
             ? null
-            : $parsed;
+            : DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
     }
 
     /**

@@ -27,9 +27,19 @@ class Formatter implements FormatterInterface
 
     public function decodeTime(?string $time): ?DateTimeInterface
     {
-        return $time === null
-            ? null
-            : DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
+        if ($time === null) {
+            return null;
+        }
+
+        $decoded = DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
+
+        if ($decoded === false) {
+              throw new ValueError(
+                \sprintf('%s::decodeTime(): Argument #1 ($time) is not a valid RFC3339 timestamp', self::class)
+            );
+        }
+
+        return $decoded;
     }
 
     /**

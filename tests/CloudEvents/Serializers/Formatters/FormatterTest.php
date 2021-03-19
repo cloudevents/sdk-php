@@ -5,6 +5,7 @@ namespace CloudEvents\Tests\CloudEvents\Serializers\Formatters;
 use CloudEvents\Serializers\Formatters\Formatter;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use ValueError;
 
 /**
  * @coversDefaultClass \CloudEvents\Serializers\Formmaters\Formatter
@@ -20,6 +21,17 @@ class FormatterTest extends TestCase
         $formatter = new Formatter();
         $this->assertEquals('2018-04-05T17:31:00Z', $formatter->encodeTime(new DateTimeImmutable('2018-04-05T17:31:00Z')));
         $this->assertEquals(new DateTimeImmutable('2018-04-05T17:31:00Z'), $formatter->decodeTime('2018-04-05T17:31:00Z'));
+    }
+
+    /**
+     * @covers ::decodeTime
+     */
+    public function testDecodeInvalidTime(): void
+    {
+        $formatter = new Formatter();
+        $this->expectException(ValueError::class);
+        $this->expectExceptionMessage('CloudEvents\\Serializers\\Formatters\\Formatter::decodeTime(): Argument #1 ($time) is not a valid RFC3339 timestamp');
+        $formatter->decodeTime('2018asdsdsafd');
     }
 
     /**

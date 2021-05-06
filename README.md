@@ -54,7 +54,9 @@ $event = (new CloudEvent())
 $serializer = new JsonSerializer();
 $serializer->serialize($event);
 
-// TODO: deserilization
+// JSON deserialization
+$serializer = new JsonSerializer();
+$serializer->deserialize(http_get_request_body());
 ```
 
 ## Testing

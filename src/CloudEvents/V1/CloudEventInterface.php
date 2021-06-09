@@ -28,4 +28,9 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
      * @return mixed|null
      */
     public function getData();
+
+    /**
+     * @return array<string,bool|int|string>
+     */
+    public function getExtensions(): array;
 }

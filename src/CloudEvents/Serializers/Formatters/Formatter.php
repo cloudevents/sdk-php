@@ -35,8 +35,8 @@ class Formatter implements FormatterInterface
 
         if ($decoded === false) {
               throw new ValueError(
-                \sprintf('%s::decodeTime(): Argument #1 ($time) is not a valid RFC3339 timestamp', self::class)
-            );
+                  \sprintf('%s(): Argument #1 ($time) is not a valid RFC3339 timestamp', __METHOD__)
+              );
         }
 
         return $decoded;
@@ -64,7 +64,7 @@ class Formatter implements FormatterInterface
 
             if ($decoded === false) {
                 throw new ValueError(
-                    \sprintf('%s::decodeData(): Argument #1 ($data) contains bad data_base64 attribute content', self::class)
+                    \sprintf('%s(): Argument #1 ($data) contains bad data_base64 attribute content', __METHOD__)
                 );
             }
 

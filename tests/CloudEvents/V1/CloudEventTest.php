@@ -168,7 +168,7 @@ class CloudEventTest extends TestCase
      * @covers ::setExtension
      * @covers ::getExtensions
      */
-    public function testCabSetAndUnsetExtensions(): void
+    public function testCanSetAndUnsetExtensions(): void
     {
         $event = $this->getEvent();
         $this->assertEquals([], $event->getExtensions());

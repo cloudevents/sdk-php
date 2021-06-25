@@ -4,6 +4,8 @@ namespace CloudEvents\Tests\CloudEvents\V1;
 
 use CloudEvents\V1\CloudEvent;
 use PHPUnit\Framework\TestCase;
+use TypeError;
+use ValueError;
 
 /**
  * @coversDefaultClass \CloudEvents\V1\CloudEvent
@@ -112,6 +114,70 @@ class CloudEventTest extends TestCase
         $this->assertEquals('<much wow=\"xml\"/>', $event->getData());
         $event = $event->setData('{"key": "value"}');
         $this->assertEquals('{"key": "value"}', $event->getData());
+    }
+
+    /**
+     * @covers ::setExtension
+     */
+    public function testCannotSetEmptyExtensionValueType(): void
+    {
+        $event = $this->getEvent();
+
+        $this->expectException(ValueError::class);
+
+        $event->setExtension('', '1.1');
+    }
+
+    /**
+     * @covers ::setExtension
+     */
+    public function testCannotSetInvalidExtensionAttribute(): void
+    {
+        $event = $this->getEvent();
+
+        $this->expectException(ValueError::class);
+
+        $event->setExtension('comBAD', '1.1');
+    }
+
+    /**
+     * @covers ::setExtension
+     */
+    public function testCannotSetReservedExtensionAttribute(): void
+    {
+        $event = $this->getEvent();
+
+        $this->expectException(ValueError::class);
+
+        $event->setExtension('specversion', '1.1');
+    }
+
+    /**
+     * @covers ::setExtension
+     */
+    public function testCannotSetInvalidExtensionValueType(): void
+    {
+        $event = $this->getEvent();
+
+        $this->expectException(TypeError::class);
+
+        $event->setExtension('comacme', 1.1);
+    }
+
+    /**
+     * @covers ::setExtension
+     * @covers ::getExtensions
+     */
+    public function testCanSetAndUnsetExtensions(): void
+    {
+        $event = $this->getEvent();
+        $this->assertEquals([], $event->getExtensions());
+        $event->setExtension('comacme', 'foo');
+        $this->assertEquals(['comacme' => 'foo'], $event->getExtensions());
+        $event->setExtension('comacme2', 123);
+        $this->assertEquals(['comacme' => 'foo', 'comacme2' => 123], $event->getExtensions());
+        $event->setExtension('comacme', null);
+        $this->assertEquals(['comacme2' => 123], $event->getExtensions());
     }
 
     private function getEvent(): CloudEvent

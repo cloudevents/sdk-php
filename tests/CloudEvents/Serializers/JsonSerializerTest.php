@@ -29,6 +29,7 @@ class JsonSerializerTest extends TestCase
         $event->method('getSubject')->willReturn('larger-context');
         $event->method('getTime')->willReturn(new DateTimeImmutable('2018-04-05T17:31:00Z'));
         $event->method('getData')->willReturn(['key' => 'value']);
+        $event->method('getExtensions')->willReturn(['comacme' => 'foo']);
 
         $formatter = new JsonSerializer();
 
@@ -43,9 +44,10 @@ class JsonSerializerTest extends TestCase
                     'dataschema' => 'com.example/schema',
                     'subject' => 'larger-context',
                     'time' => '2018-04-05T17:31:00Z',
+                    'comacme' => 'foo',
                     'data' => [
                         'key' => 'value',
-                    ]
+                    ],
                 ],
                 JSON_THROW_ON_ERROR
             ),
@@ -70,7 +72,8 @@ class JsonSerializerTest extends TestCase
                 'time' => '2018-04-05T17:31:00Z',
                 'data' => [
                     'key' => 'value',
-                ]
+                ],
+                'comacme' => 'foo',
             ]
         );
 
@@ -87,5 +90,6 @@ class JsonSerializerTest extends TestCase
         $this->assertEquals('larger-context', $event->getSubject());
         $this->assertEquals(new DateTimeImmutable('2018-04-05T17:31:00Z'), $event->getTime());
         $this->assertEquals(['key' => 'value'], $event->getData());
+        $this->assertEquals(['comacme' => 'foo'], $event->getExtensions());
     }
 }

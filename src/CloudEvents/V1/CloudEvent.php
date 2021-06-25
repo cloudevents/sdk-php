@@ -5,9 +5,24 @@ declare(strict_types=1);
 namespace CloudEvents\V1;
 
 use DateTimeInterface;
+use TypeError;
+use ValueError;
 
 class CloudEvent implements CloudEventInterface
 {
+    private const RESERVED_ATTRIBUTES = [
+        'specversion',
+        'id',
+        'source',
+        'type',
+        'data',
+        'data_base64',
+        'datacontenttype',
+        'dataschema',
+        'subject',
+        'time',
+    ];
+
     private string $id;
     private string $source;
     private string $type;
@@ -18,6 +33,9 @@ class CloudEvent implements CloudEventInterface
 
     /** @var mixed|null */
     private $data;
+
+    /** @var array<string,bool|int|string> */
+    private array $extensions;
 
     public function __construct(
         string $id,
@@ -37,6 +55,7 @@ class CloudEvent implements CloudEventInterface
         $this->dataSchema = $dataSchema;
         $this->subject = $subject;
         $this->time = $time;
+        $this->extensions = [];
     }
 
     public function getSpecVersion(): string
@@ -142,6 +161,49 @@ class CloudEvent implements CloudEventInterface
     public function setTime(?DateTimeInterface $time): CloudEvent
     {
         $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string,bool|int|string>
+     */
+    public function getExtensions(): array
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * @param bool|int|string|null $value
+     */
+    public function setExtension(string $attribute, $value): CloudEvent
+    {
+        if (\preg_match('/^[a-z0-9]+$/', $attribute) !== 1) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($attribute) must match the regex [a-z0-9]+, %s given', __METHOD__, $attribute)
+            );
+        }
+
+        if (in_array($attribute, self::RESERVED_ATTRIBUTES, true)) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($attribute) must not be a reserved attribute, %s given', __METHOD__, $attribute)
+            );
+        }
+
+        $type = \get_debug_type($value);
+        $types = ['bool', 'int', 'string', 'null'];
+
+        if (!in_array($type, $types, true)) {
+            throw new TypeError(
+                \sprintf('%s(): Argument #2 ($value) must be of type %s, %s given', __METHOD__, implode('|', $types), $type)
+            );
+        }
+
+        if ($value === null) {
+            unset($this->extensions[$attribute]);
+        } else {
+            $this->extensions[$attribute] = $value;
+        }
 
         return $this;
     }

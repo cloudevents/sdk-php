@@ -29,6 +29,7 @@ class ArraySerializerTest extends TestCase
         $event->method('getSubject')->willReturn('larger-context');
         $event->method('getTime')->willReturn(new DateTimeImmutable('2018-04-05T17:31:00Z'));
         $event->method('getData')->willReturn(['key' => 'value']);
+        $event->method('getExtensions')->willReturn(['comacme' => 'foo']);
 
         $formatter = new ArraySerializer();
 
@@ -42,9 +43,10 @@ class ArraySerializerTest extends TestCase
                 'dataschema' => 'com.example/schema',
                 'subject' => 'larger-context',
                 'time' => '2018-04-05T17:31:00Z',
+                'comacme' => 'foo',
                 'data' => [
                     'key' => 'value',
-                ]
+                ],
             ],
             $formatter->serialize($event)
         );
@@ -63,6 +65,7 @@ class ArraySerializerTest extends TestCase
         $event->method('getType')->willReturn('com.example.someevent');
         $event->method('getSubject')->willReturn('larger-context');
         $event->method('getTime')->willReturn(new DateTimeImmutable('2018-04-05T17:31:00Z'));
+        $event->method('getExtensions')->willReturn([]);
 
         $formatter = new ArraySerializer();
 
@@ -95,7 +98,8 @@ class ArraySerializerTest extends TestCase
             'time' => '2018-04-05T17:31:00Z',
             'data' => [
                 'key' => 'value',
-            ]
+            ],
+            'comacme' => 'foo',
         ];
 
         $formatter = new ArraySerializer();
@@ -111,5 +115,6 @@ class ArraySerializerTest extends TestCase
         $this->assertEquals('larger-context', $event->getSubject());
         $this->assertEquals(new DateTimeImmutable('2018-04-05T17:31:00Z'), $event->getTime());
         $this->assertEquals(['key' => 'value'], $event->getData());
+        $this->assertEquals(['comacme' => 'foo'], $event->getExtensions());
     }
 }

@@ -16,6 +16,11 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 
     public function getType(): string;
 
+    /**
+     * @return mixed
+     */
+    public function getData();
+
     public function getDataContentType(): ?string;
 
     public function getDataSchema(): ?string;
@@ -23,11 +28,6 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
     public function getSubject(): ?string;
 
     public function getTime(): ?DateTimeInterface;
-
-    /**
-     * @return mixed|null
-     */
-    public function getData();
 
     /**
      * @return array<string,bool|int|string>

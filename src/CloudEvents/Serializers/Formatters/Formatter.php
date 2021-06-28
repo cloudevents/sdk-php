@@ -43,7 +43,7 @@ class Formatter implements FormatterInterface
     }
 
     /**
-     * @param mixed|null $data
+     * @param mixed $data
      */
     public function encodeData($data): array
     {
@@ -55,7 +55,7 @@ class Formatter implements FormatterInterface
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function decodeData(array $data)
     {
@@ -79,7 +79,7 @@ class Formatter implements FormatterInterface
     }
 
     /**
-     * @param mixed|null $data
+     * @param mixed $data
      */
     protected function isBinary($data): bool
     {

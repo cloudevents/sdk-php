@@ -180,6 +180,26 @@ class CloudEventTest extends TestCase
         $this->assertEquals(['comacme2' => 123], $event->getExtensions());
     }
 
+    /**
+     * @covers ::createFromInterface
+     */
+    public function testCanCreateFromInterface(): void
+    {
+        $original = $this->getEvent();
+        $event = CloudEvent::createFromInterface($original);
+        $this->assertInstanceOf(CloudEvent::class, $original);
+        $this->assertInstanceOf(CloudEventInterface::class, $original);
+        $this->assertSame($original->getId(), $event->getId());
+        $this->assertSame($original->getSource(), $event->getSource());
+        $this->assertSame($original->getType(), $event->getType());
+        $this->assertSame($original->getData(), $event->getData());
+        $this->assertSame($original->getDataContentType(), $event->getDataContentType());
+        $this->assertSame($original->getDataSchema(), $event->getDataSchema());
+        $this->assertSame($original->getSubject(), $event->getSubject());
+        $this->assertSame($original->getTime(), $event->getTime());
+        $this->assertSame($original->getExtensions(), $event->getExtensions());
+    }
+
     private function getEvent(): CloudEvent
     {
         return new CloudEvent(

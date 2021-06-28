@@ -188,7 +188,6 @@ class CloudEventTest extends TestCase
         $original = $this->getEvent();
         $event = CloudEvent::createFromInterface($original);
         $this->assertInstanceOf(CloudEvent::class, $original);
-        $this->assertInstanceOf(CloudEventInterface::class, $original);
         $this->assertSame($original->getId(), $event->getId());
         $this->assertSame($original->getSource(), $event->getSource());
         $this->assertSame($original->getType(), $event->getType());

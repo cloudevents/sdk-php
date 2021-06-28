@@ -24,19 +24,29 @@ class CloudEvent implements CloudEventInterface
     ];
 
     private string $id;
-    private string $source;
-    private string $type;
-    private ?string $dataContentType;
-    private ?string $dataSchema;
-    private ?string $subject;
-    private ?DateTimeInterface $time;
 
-    /** @var mixed|null */
+    private string $source;
+
+    private string $type;
+
+    /** @var mixed */
     private $data;
 
-    /** @var array<string,bool|int|string> */
-    private array $extensions;
+    private ?string $dataContentType;
 
+    private ?string $dataSchema;
+
+    private ?string $subject;
+
+    private ?DateTimeInterface $time;
+
+    /** @var array<string,bool|int|string> */
+    private array $extensions = [];
+
+    /**
+     * @param mixed $data
+     * @param array<string,bool|int|string|null> $extensions
+     */
     public function __construct(
         string $id,
         string $source,
@@ -45,22 +55,38 @@ class CloudEvent implements CloudEventInterface
         ?string $dataContentType = null,
         ?string $dataSchema = null,
         ?string $subject = null,
-        ?DateTimeInterface $time = null
+        ?DateTimeInterface $time = null,
+        array $extensions = []
     ) {
-        $this->id = $id;
-        $this->source = $source;
-        $this->type = $type;
-        $this->data = $data;
-        $this->dataContentType = $dataContentType;
-        $this->dataSchema = $dataSchema;
-        $this->subject = $subject;
-        $this->time = $time;
-        $this->extensions = [];
+        $this->setId($id);
+        $this->setSource($source);
+        $this->setType($type);
+        $this->setData($data);
+        $this->setDataContentType($dataContentType);
+        $this->setDataSchema($dataSchema);
+        $this->setSubject($subject);
+        $this->setTime($time);
+        $this->setExtensions($extensions);
+    }
+
+    public static function createFromInterface(CloudEventInterface $event): CloudEvent
+    {
+        return new CloudEvent(
+            $event->getId(),
+            $event->getSource(),
+            $event->getType(),
+            $event->getData(),
+            $event->getDataContentType(),
+            $event->getDataSchema(),
+            $event->getSubject(),
+            $event->getTime(),
+            $event->getExtensions()
+        );
     }
 
     public function getSpecVersion(): string
     {
-        return static::SPEC_VERSION;
+        return CloudEventInterface::SPEC_VERSION;
     }
 
     public function getId(): string
@@ -70,6 +96,12 @@ class CloudEvent implements CloudEventInterface
 
     public function setId(string $id): CloudEvent
     {
+        if ('' === $id) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($id) must be a non-empty string, "" given', __METHOD__)
+            );
+        }
+
         $this->id = $id;
 
         return $this;
@@ -82,6 +114,12 @@ class CloudEvent implements CloudEventInterface
 
     public function setSource(string $source): CloudEvent
     {
+        if ('' === $source) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($source) must be a non-empty string, "" given', __METHOD__)
+            );
+        }
+
         $this->source = $source;
 
         return $this;
@@ -94,13 +132,19 @@ class CloudEvent implements CloudEventInterface
 
     public function setType(string $type): CloudEvent
     {
+        if ('' === $type) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($type) must be a non-empty string, "" given', __METHOD__)
+            );
+        }
+
         $this->type = $type;
 
         return $this;
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getData()
     {
@@ -108,7 +152,7 @@ class CloudEvent implements CloudEventInterface
     }
 
     /**
-     * @param mixed|null $data
+     * @param mixed $data
      */
     public function setData($data): CloudEvent
     {
@@ -124,6 +168,12 @@ class CloudEvent implements CloudEventInterface
 
     public function setDataContentType(?string $dataContentType): CloudEvent
     {
+        if ($dataContentType !== null && \preg_match('#^[-\w]+/[-\w]+$#', $dataContentType) !== 1) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($dataContentType) must be a valid mime-type string or null, "%s" given', __METHOD__, $dataContentType)
+            );
+        }
+
         $this->dataContentType = $dataContentType;
 
         return $this;
@@ -136,6 +186,12 @@ class CloudEvent implements CloudEventInterface
 
     public function setDataSchema(?string $dataSchema): CloudEvent
     {
+        if ('' === $dataSchema) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($dataSchema) must be a non-empty string or null, "" given', __METHOD__)
+            );
+        }
+
         $this->dataSchema = $dataSchema;
 
         return $this;
@@ -148,6 +204,12 @@ class CloudEvent implements CloudEventInterface
 
     public function setSubject(?string $subject): CloudEvent
     {
+        if ('' === $subject) {
+            throw new ValueError(
+                \sprintf('%s(): Argument #1 ($subject) must be a non-empty string or null, "" given', __METHOD__)
+            );
+        }
+
         $this->subject = $subject;
 
         return $this;
@@ -171,6 +233,18 @@ class CloudEvent implements CloudEventInterface
     public function getExtensions(): array
     {
         return $this->extensions;
+    }
+
+    /**
+     * @param array<string,bool|int|string|null> $extensions
+     */
+    public function setExtensions(array $extensions): CloudEvent
+    {
+        foreach ($extensions as $attribute => $value) {
+            $this->setExtension($attribute, $value);
+        }
+
+        return $this;
     }
 
     /**

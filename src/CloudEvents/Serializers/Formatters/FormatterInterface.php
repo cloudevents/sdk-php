@@ -11,12 +11,12 @@ interface FormatterInterface
     public function decodeTime(?string $time): ?DateTimeInterface;
 
     /**
-     * @param mixed|null $data
+     * @param mixed $data
      */
     public function encodeData($data): array;
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function decodeData(array $data);
 }

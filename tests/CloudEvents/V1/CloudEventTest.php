@@ -172,11 +172,16 @@ class CloudEventTest extends TestCase
     {
         $event = $this->getEvent();
         $this->assertEquals([], $event->getExtensions());
+        $this->assertNull($event->getExtension('comacme'));
+        $this->assertNull($event->getExtension('comacme2'));
         $event->setExtension('comacme', 'foo');
+        $this->assertEquals('foo', $event->getExtension('comacme'));
         $this->assertEquals(['comacme' => 'foo'], $event->getExtensions());
         $event->setExtension('comacme2', 123);
+        $this->assertEquals(123, $event->getExtension('comacme2'));
         $this->assertEquals(['comacme' => 'foo', 'comacme2' => 123], $event->getExtensions());
         $event->setExtension('comacme', null);
+        $this->assertNull($event->getExtension('comacme'));
         $this->assertEquals(['comacme2' => 123], $event->getExtensions());
     }
 

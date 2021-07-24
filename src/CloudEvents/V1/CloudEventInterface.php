@@ -33,4 +33,9 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
      * @return array<string,bool|int|string>
      */
     public function getExtensions(): array;
+
+    /**
+     * @return bool|int|string|null
+     */
+    public function getExtension(string $attribute);
 }

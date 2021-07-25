@@ -23,20 +23,22 @@ use CloudEvents\V1\CloudEvent;
 use CloudEvents\V1\CloudEventImmutable;
 
 // Immtuable CloudEvent
-$immutableEvent = (new CloudEventImmutable())
-    ->withId('1n6bFxDMHZFChlI4TVI9tdzphB9')
-    ->withSource('/examples/php-sdk')
-    ->withType('com.example.type')
-    ->withData(['example' => 'first-event'])
-    ->withDataContentType('application/json');
+$immutableEvent = new CloudEventImmutable(
+    '1n6bFxDMHZFChlI4TVI9tdzphB9',
+    '/examples/php-sdk',
+    'com.example.type',
+    ['example' => 'first-event'],
+    'application/json'
+);
 
 // Mutable CloudEvent
-$mutableEvent = (new CloudEvent())
-    ->withId('1n6bFxDMHZFChlI4TVI9tdzphB9')
-    ->withSource('/examples/php-sdk')
-    ->withType('com.example.type')
-    ->withData(['example' => 'first-event'])
-    ->withDataContentType('application/json');
+$mutableEvent = new CloudEvent(
+    '1n6bFxDMHZFChlI4TVI9tdzphB9',
+    '/examples/php-sdk',
+    'com.example.type',
+    ['example' => 'first-event'],
+    'application/json'
+);
 
 // Create immutable from mutable or via versa
 $event = CloudEventImmutable::createFromInterface($mutableEvent);
@@ -46,18 +48,36 @@ $event = CloudEvent::createFromInterface($immutableEvent);
 ## Serialize/Deserialize a CloudEvent
 
 ```php
+use CloudEvents\Serializers\JsonDeserializer;
 use CloudEvents\Serializers\JsonSerializer;
-use CloudEvents\V1\CloudEvent;
-
-$event = ...
-
-$serializer = new JsonSerializer();
 
 // JSON serialization
-$serializer->serialize($event);
+$payload = JsonSerializer::create()->serializeStructured($event);
+$payload = JsonSerializer::create()->serializeBatch($events);
 
 // JSON deserialization
-$serializer->deserialize(http_get_request_body());
+$event = JsonDeserializer::create()->deserializeStructured($payload);
+$events = JsonDeserializer::create()->deserializeBatch($payload);
+```
+
+## Marshal/Unmarchal a CloudEvent
+
+```php
+use CloudEvents\Http\Marshaller;
+use CloudEvents\Http\Unmarshaller;
+
+// Marchal HTTP request
+$request = Marshaller::createJsonMarshaller()->marshalStructuredRequest($event);
+$request = Marshaller::createJsonMarshaller()->marshalBinaryRequest($event);
+$request = Marshaller::createJsonMarshaller()->marshalBatchRequest($events);
+
+// Marchal HTTP response
+$request = Marshaller::createJsonMarshaller()->marshalStructuredResponse($event);
+$request = Marshaller::createJsonMarshaller()->marshalBinaryResponse($event);
+$request = Marshaller::createJsonMarshaller()->marshalBatchResponse($events);
+
+// Unmarchal HTTP message
+$events = Unmarshaller::createJsonUnmarshaller()->unmarshal($message);
 ```
 
 ## Testing
@@ -70,6 +90,7 @@ $ composer run -l
 scripts:
   lint          Show all current linting errors according to PSR12
   lint-fix      Show and fix all current linting errors according to PSR12
+  sa            Run the static analyzer
   tests         Run all tests locally
   tests-build   Build containers to test against supported PHP versions
   tests-docker  Run tests within supported PHP version containers

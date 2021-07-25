@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CloudEvents\V1;
 
-use DateTimeInterface;
+use DateTimeImmutable;
 
 interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 {
@@ -27,7 +27,7 @@ interface CloudEventInterface extends \CloudEvents\CloudEventInterface
 
     public function getSubject(): ?string;
 
-    public function getTime(): ?DateTimeInterface;
+    public function getTime(): ?DateTimeImmutable;
 
     /**
      * @return array<string,bool|int|string>

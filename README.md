@@ -11,51 +11,52 @@ This SDK aims to supports the following versions of CloudEvents:
 ## Installation
 
 Install the SDK using [composer](https://getcomposer.org/):
+
 ```sh
-composer require cloudevents/sdk-php
+$ composer require cloudevents/sdk-php
 ```
 
-## Send your first CloudEvent
-
-Note, this is just the desired API at this point and doesn't reflect the functionality of this SDK yet.
+## Create a CloudEvent
 
 ```php
-use \CloudEvents\Client;
-use \CloudEvents\V1\CloudEvent;
-use \CloudEvents\Request;
+use CloudEvents\V1\CloudEvent;
+use CloudEvents\V1\CloudEventImmutable;
 
-$event = (new CloudEvent())
-    // The current implementation requires you to maintain your own id.
-    ->setId('1n6bFxDMHZFChlI4TVI9tdzphB9')
-    ->setSource('/examples/php-sdk')
-    ->setType('com.example.type')
-    ->setData(json_encode(['example' => 'first-event']));
+// Immtuable CloudEvent
+$immutableEvent = (new CloudEventImmutable())
+    ->withId('1n6bFxDMHZFChlI4TVI9tdzphB9')
+    ->withSource('/examples/php-sdk')
+    ->withType('com.example.type')
+    ->withData(['example' => 'first-event'])
+    ->withDataContentType('application/json');
 
-(new Client('http://localhost:8080/'))
-    ->sendRequest(new Request($event));
+// Mutable CloudEvent
+$mutableEvent = (new CloudEvent())
+    ->withId('1n6bFxDMHZFChlI4TVI9tdzphB9')
+    ->withSource('/examples/php-sdk')
+    ->withType('com.example.type')
+    ->withData(['example' => 'first-event'])
+    ->withDataContentType('application/json');
+
+// Create immutable from mutable or via versa
+$event = CloudEventImmutable::createFromInterface($mutableEvent);
+$event = CloudEvent::createFromInterface($immutableEvent);
 ```
-
-Note that the `CloudEvents\Client` implements the [PSR-18](https://www.php-fig.org/psr/psr-18/) spec and the `CloudEvents\Request` implements the appropriate [PSR-7 interfaces](https://www.php-fig.org/psr/psr-7/).
 
 ## Serialize/Deserialize a CloudEvent
 
 ```php
 use CloudEvents\Serializers\JsonSerializer;
-use \CloudEvents\V1\CloudEvent;
+use CloudEvents\V1\CloudEvent;
 
-$event = (new CloudEvent())
-    // The current implementation requires you to maintain your own id.
-    ->setId('1n6bFxDMHZFChlI4TVI9tdzphB9')
-    ->setSource('/examples/php-sdk')
-    ->setType('com.example.type')
-    ->setData(json_encode(['example' => 'first-event']));
+$event = ...
+
+$serializer = new JsonSerializer();
 
 // JSON serialization
-$serializer = new JsonSerializer();
 $serializer->serialize($event);
 
 // JSON deserialization
-$serializer = new JsonSerializer();
 $serializer->deserialize(http_get_request_body());
 ```
 

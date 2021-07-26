@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace CloudEvents\Utilities;
 
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
 use ValueError;
 
 /**

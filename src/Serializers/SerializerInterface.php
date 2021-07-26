@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace CloudEvents\Serializers;
 
 use CloudEvents\CloudEventInterface;
-use CloudEvents\Exceptions\InvalidPayloadSyntaxException;
 use CloudEvents\Exceptions\UnsupportedSpecVersionException;
-use CloudEvents\Exceptions\MissingAttributeException;
 
 interface SerializerInterface
 {

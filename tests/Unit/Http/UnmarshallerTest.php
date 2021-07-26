@@ -7,7 +7,6 @@ namespace Tests\Unit\Http;
 use CloudEvents\V1\CloudEventInterface;
 use CloudEvents\Http\Unmarshaller;
 use CloudEvents\Http\UnmarshallerInterface;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Message;
 use CloudEvents\Exceptions\UnsupportedContentTypeException;

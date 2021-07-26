@@ -60,7 +60,7 @@ final class Unmarshaller implements UnmarshallerInterface
             }
         }
 
-        throw new UnsupportedContentTypeException;
+        throw new UnsupportedContentTypeException();
     }
 
     /**

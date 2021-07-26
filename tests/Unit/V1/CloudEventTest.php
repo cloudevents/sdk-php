@@ -6,7 +6,6 @@ namespace Tests\Unit\V1;
 
 use CloudEvents\CloudEventInterface;
 use CloudEvents\V1\CloudEvent;
-use CloudEvents\V1\CloudEventImmutable;
 use CloudEvents\V1\CloudEventInterface as CloudEventInterfaceV1;
 use PHPUnit\Framework\TestCase;
 use TypeError;

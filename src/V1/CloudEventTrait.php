@@ -273,7 +273,7 @@ trait CloudEventTrait
             );
         }
 
-        /** 
+        /**
          * @psalm-suppress UndefinedFunction
          * @var string
          */

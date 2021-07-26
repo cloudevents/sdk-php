@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Utilities;
 
 use CloudEvents\Utilities\DataFormatter;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use ValueError;
 

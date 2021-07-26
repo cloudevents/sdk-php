@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace CloudEvents\Http;
 
 use CloudEvents\CloudEventInterface;
-use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use CloudEvents\Exceptions\InvalidPayloadSyntaxException;
 use CloudEvents\Exceptions\UnsupportedSpecVersionException;
-use CloudEvents\Exceptions\MissingAttributeException;
 
 interface MarshallerInterface
 {

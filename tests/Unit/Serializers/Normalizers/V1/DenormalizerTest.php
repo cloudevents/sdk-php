@@ -6,9 +6,7 @@ namespace Tests\Unit\Serializers\Normalizers\V1;
 
 use CloudEvents\Serializers\Normalizers\V1\Denormalizer;
 use CloudEvents\Serializers\Normalizers\V1\DenormalizerInterface;
-use CloudEvents\V1\CloudEventInterface;
 use DateTimeImmutable;
-use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use CloudEvents\Exceptions\MissingAttributeException;
 

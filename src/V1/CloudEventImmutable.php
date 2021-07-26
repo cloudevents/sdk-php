@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CloudEvents\V1;
 
 use DateTimeImmutable;
-use ValueError;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor

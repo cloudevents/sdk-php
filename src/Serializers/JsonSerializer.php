@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace CloudEvents\Serializers;
 
 use CloudEvents\CloudEventInterface;
-use CloudEvents\V1\CloudEventImmutable;
 use CloudEvents\V1\CloudEventInterface as V1CloudEventInterface;
-use CloudEvents\Exceptions\InvalidPayloadSyntaxException;
 use CloudEvents\Exceptions\UnsupportedSpecVersionException;
-use CloudEvents\Exceptions\MissingAttributeException;
 use CloudEvents\Serializers\Normalizers\V1\Normalizer;
 use CloudEvents\Serializers\Normalizers\V1\NormalizerInterface;
-use JsonException;
 
 final class JsonSerializer implements SerializerInterface
 {
@@ -104,8 +100,8 @@ final class JsonSerializer implements SerializerInterface
      *
      * @return string
      */
-     private static function encodeAttributeValue($value): string
-     {
+    private static function encodeAttributeValue($value): string
+    {
         if ($value === true) {
             return 'true';
         }
@@ -115,5 +111,5 @@ final class JsonSerializer implements SerializerInterface
         }
 
         return rawurlencode((string) $value);
-     }
+    }
 }

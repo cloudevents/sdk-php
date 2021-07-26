@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace CloudEvents\Serializers;
 
 use CloudEvents\CloudEventInterface;
-use CloudEvents\V1\CloudEventImmutable;
-use CloudEvents\V1\CloudEventInterface as V1CloudEventInterface;
 use CloudEvents\Exceptions\InvalidPayloadSyntaxException;
 use CloudEvents\Exceptions\UnsupportedSpecVersionException;
 use CloudEvents\Exceptions\MissingAttributeException;
@@ -45,7 +43,7 @@ final class JsonDeserializer implements DeserializerInterface
         }
 
         if (!is_array($decoded)) {
-            throw new InvalidPayloadSyntaxException;
+            throw new InvalidPayloadSyntaxException();
         }
 
         return $this->denormalizer->denormalize($decoded);
@@ -67,14 +65,14 @@ final class JsonDeserializer implements DeserializerInterface
         }
 
         if (!is_array($decoded)) {
-            throw new InvalidPayloadSyntaxException;
+            throw new InvalidPayloadSyntaxException();
         }
 
         $cloudEvents = [];
 
         foreach ($decoded as $value) {
             if (!is_array($value)) {
-                throw new InvalidPayloadSyntaxException;
+                throw new InvalidPayloadSyntaxException();
             }
 
             $cloudEvents[] = $this->denormalizer->denormalize($value);

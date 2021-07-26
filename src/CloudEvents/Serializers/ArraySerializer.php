@@ -8,9 +8,7 @@ use CloudEvents\Serializers\Exceptions\UnsupportedEventSpecVersionException;
 use CloudEvents\Serializers\Formatters\Formatter;
 use CloudEvents\Serializers\Formatters\FormatterInterface;
 use CloudEvents\V1\CloudEventInterface as V1CloudEventInterface;
-use CloudEvents\V1\CloudEvent;
-use DateTimeInterface;
-use DateTimeZone;
+use CloudEvents\V1\CloudEventImmutable;
 
 class ArraySerializer
 {
@@ -61,7 +59,7 @@ class ArraySerializer
      */
     public function deserialize(array $payload): CloudEventInterface
     {
-        return $this->decodePayload($payload)->setData($this->formatter->decodeData($payload));
+        return $this->decodePayload($payload)->withData($this->formatter->decodeData($payload));
     }
 
     /**
@@ -70,14 +68,14 @@ class ArraySerializer
      * @throws UnsupportedEventSpecVersionException
      * @throws MissingPayloadAttributeException
      */
-    protected function decodePayload(array $payload): CloudEventInterface
+    protected function decodePayload(array $payload): CloudEventImmutable
     {
         if ($payload['specversion'] ?? null === V1CloudEventInterface::SPEC_VERSION) {
             if (!isset($payload['id']) || !isset($payload['source']) || !isset($payload['type'])) {
                 throw new MissingPayloadAttributeException();
             }
 
-            $cloudEvent = new CloudEvent(
+            $cloudEvent = new CloudEventImmutable(
                 $payload['id'],
                 $payload['source'],
                 $payload['type']
@@ -93,19 +91,19 @@ class ArraySerializer
                     case 'data_base64':
                         break;
                     case 'datacontenttype':
-                        $cloudEvent->setDataContentType($value);
+                        $cloudEvent = $cloudEvent->withDataContentType($value);
                         break;
                     case 'dataschema':
-                        $cloudEvent->setDataSchema($value);
+                        $cloudEvent = $cloudEvent->withDataSchema($value);
                         break;
                     case 'subject':
-                        $cloudEvent->setSubject($value);
+                        $cloudEvent = $cloudEvent->withSubject($value);
                         break;
                     case 'time':
-                        $cloudEvent->setTime($this->formatter->decodeTime($value));
+                        $cloudEvent = $cloudEvent->withTime($this->formatter->decodeTime($value));
                         break;
                     default:
-                        $cloudEvent->setExtension($attribute, $value);
+                        $cloudEvent = $cloudEvent->withExtension($attribute, $value);
                         break;
                 }
             }

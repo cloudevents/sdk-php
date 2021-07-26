@@ -2,13 +2,13 @@
 
 namespace CloudEvents\Serializers\Formatters;
 
-use DateTimeInterface;
+use DateTimeImmutable;
 
 interface FormatterInterface
 {
-    public function encodeTime(?DateTimeInterface $time): ?string;
+    public function encodeTime(?DateTimeImmutable $time): ?string;
 
-    public function decodeTime(?string $time): ?DateTimeInterface;
+    public function decodeTime(?string $time): ?DateTimeImmutable;
 
     /**
      * @param mixed $data

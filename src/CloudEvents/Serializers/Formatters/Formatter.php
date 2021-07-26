@@ -4,7 +4,6 @@ namespace CloudEvents\Serializers\Formatters;
 
 use DateTime;
 use DateTimeImmutable;
-use DateTimeInterface;
 use DateTimeZone;
 use ValueError;
 
@@ -13,19 +12,16 @@ class Formatter implements FormatterInterface
     private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const TIME_ZONE = 'UTC';
 
-    public function encodeTime(?DateTimeInterface $time): ?string
+    public function encodeTime(?DateTimeImmutable $time): ?string
     {
         if ($time === null) {
             return null;
         }
 
-        // make sure we don't mutate the original object
-        return ($time instanceof DateTime ? DateTimeImmutable::createFromMutable($time) : $time)
-            ->setTimezone(new DateTimeZone(self::TIME_ZONE))
-            ->format(self::TIME_FORMAT);
+        return $time->setTimezone(new DateTimeZone(self::TIME_ZONE))->format(self::TIME_FORMAT);
     }
 
-    public function decodeTime(?string $time): ?DateTimeInterface
+    public function decodeTime(?string $time): ?DateTimeImmutable
     {
         if ($time === null) {
             return null;

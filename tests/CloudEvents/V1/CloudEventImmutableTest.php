@@ -2,17 +2,17 @@
 
 namespace CloudEvents\Tests\CloudEvents\V1;
 
-use CloudEvents\V1\CloudEvent;
+use CloudEvents\V1\CloudEventImmutable;
 use CloudEvents\V1\CloudEventInterface;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 use ValueError;
 
 /**
- * @coversDefaultClass \CloudEvents\V1\CloudEvent
+ * @coversDefaultClass \CloudEvents\V1\CloudEventImmutable
  * @coversDefaultClass \CloudEvents\V1\CloudEventTrait
  */
-class CloudEventTest extends TestCase
+class CloudEventImmutableTest extends TestCase
 {
     /**
      * @covers ::getSpecVersion
@@ -24,102 +24,102 @@ class CloudEventTest extends TestCase
 
     /**
      * @covers ::getId
-     * @covers ::setId
+     * @covers ::withId
      */
     public function testGetSetId(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('A234-1234-1234', $event->getId());
-        $event = $event->setId('new-id');
+        $event = $event->withId('new-id');
         $this->assertEquals('new-id', $event->getId());
     }
 
     /**
      * @covers ::getSource
-     * @covers ::setSource
+     * @covers ::withSource
      */
     public function testGetSetSource(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('https://github.com/cloudevents/spec/pull', $event->getSource());
-        $event = $event->setSource('new-source');
+        $event = $event->withSource('new-source');
         $this->assertEquals('new-source', $event->getSource());
     }
 
     /**
      * @covers ::getType
-     * @covers ::setType
+     * @covers ::withType
      */
     public function testGetSetType(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('com.github.pull_request.opened', $event->getType());
-        $event = $event->setType('new-type');
+        $event = $event->withType('new-type');
         $this->assertEquals('new-type', $event->getType());
     }
 
     /**
      * @covers ::getDataContentType
-     * @covers ::setDataContentType
+     * @covers ::withDataContentType
      */
     public function testGetSetDataContentType(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('text/xml', $event->getDataContentType());
-        $event = $event->setDataContentType('application/json');
+        $event = $event->withDataContentType('application/json');
         $this->assertEquals('application/json', $event->getDataContentType());
     }
 
     /**
      * @covers ::getDataSchema
-     * @covers ::setDataSchema
+     * @covers ::withDataSchema
      */
     public function testGetSetDataSchema(): void
     {
         $event = $this->getEvent();
         $this->assertEquals(null, $event->getDataSchema());
-        $event = $event->setDataSchema('new-schema');
+        $event = $event->withDataSchema('new-schema');
         $this->assertEquals('new-schema', $event->getDataSchema());
     }
 
     /**
      * @covers ::getSubject
-     * @covers ::setSubject
+     * @covers ::withSubject
      */
     public function testGetSetSubject(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('123', $event->getSubject());
-        $event = $event->setSubject('new-subject');
+        $event = $event->withSubject('new-subject');
         $this->assertEquals('new-subject', $event->getSubject());
     }
 
     /**
      * @covers ::getTime
-     * @covers ::setTime
+     * @covers ::withTime
      */
     public function testGetSetTime(): void
     {
         $event = $this->getEvent();
         $this->assertEquals(new \DateTimeImmutable('2018-04-05T17:31:00Z'), $event->getTime());
-        $event = $event->setTime(new \DateTimeImmutable('2021-01-19T17:31:00Z'));
+        $event = $event->withTime(new \DateTimeImmutable('2021-01-19T17:31:00Z'));
         $this->assertEquals(new \DateTimeImmutable('2021-01-19T17:31:00Z'), $event->getTime());
     }
 
     /**
      * @covers ::getData
-     * @covers ::setData
+     * @covers ::withData
      */
     public function testGetSetData(): void
     {
         $event = $this->getEvent();
         $this->assertEquals('<much wow=\"xml\"/>', $event->getData());
-        $event = $event->setData('{"key": "value"}');
+        $event = $event->withData('{"key": "value"}');
         $this->assertEquals('{"key": "value"}', $event->getData());
     }
 
     /**
-     * @covers ::setExtension
+     * @covers ::withExtension
      */
     public function testCannotSetEmptyExtensionValueType(): void
     {
@@ -127,11 +127,11 @@ class CloudEventTest extends TestCase
 
         $this->expectException(ValueError::class);
 
-        $event->setExtension('', '1.1');
+        $event->withExtension('', '1.1');
     }
 
     /**
-     * @covers ::setExtension
+     * @covers ::withExtension
      */
     public function testCannotSetInvalidExtensionAttribute(): void
     {
@@ -139,11 +139,11 @@ class CloudEventTest extends TestCase
 
         $this->expectException(ValueError::class);
 
-        $event->setExtension('comBAD', '1.1');
+        $event->withExtension('comBAD', '1.1');
     }
 
     /**
-     * @covers ::setExtension
+     * @covers ::withExtension
      */
     public function testCannotSetReservedExtensionAttribute(): void
     {
@@ -151,11 +151,11 @@ class CloudEventTest extends TestCase
 
         $this->expectException(ValueError::class);
 
-        $event->setExtension('specversion', '1.1');
+        $event->withExtension('specversion', '1.1');
     }
 
     /**
-     * @covers ::setExtension
+     * @covers ::withExtension
      */
     public function testCannotSetInvalidExtensionValueType(): void
     {
@@ -163,7 +163,7 @@ class CloudEventTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-        $event->setExtension('comacme', 1.1);
+        $event->withExtension('comacme', 1.1);
     }
 
     /**
@@ -177,13 +177,13 @@ class CloudEventTest extends TestCase
         $this->assertEquals([], $event->getExtensions());
         $this->assertNull($event->getExtension('comacme'));
         $this->assertNull($event->getExtension('comacme2'));
-        $event = $event->setExtension('comacme', 'foo');
+        $event = $event->withExtension('comacme', 'foo');
         $this->assertEquals('foo', $event->getExtension('comacme'));
         $this->assertEquals(['comacme' => 'foo'], $event->getExtensions());
-        $event = $event->setExtension('comacme2', 123);
+        $event = $event->withExtension('comacme2', 123);
         $this->assertEquals(123, $event->getExtension('comacme2'));
         $this->assertEquals(['comacme' => 'foo', 'comacme2' => 123], $event->getExtensions());
-        $event = $event->setExtension('comacme', null);
+        $event = $event->withExtension('comacme', null);
         $this->assertNull($event->getExtension('comacme'));
         $this->assertEquals(['comacme2' => 123], $event->getExtensions());
     }
@@ -194,8 +194,8 @@ class CloudEventTest extends TestCase
     public function testCanCreateFromInterface(): void
     {
         $original = $this->getEvent();
-        $event = CloudEvent::createFromInterface($original);
-        $this->assertInstanceOf(CloudEvent::class, $original);
+        $event = CloudEventImmutable::createFromInterface($original);
+        $this->assertInstanceOf(CloudEventImmutable::class, $original);
         $this->assertInstanceOf(CloudEventInterface::class, $original);
         $this->assertSame($original->getId(), $event->getId());
         $this->assertSame($original->getSource(), $event->getSource());
@@ -208,9 +208,9 @@ class CloudEventTest extends TestCase
         $this->assertSame($original->getExtensions(), $event->getExtensions());
     }
 
-    private function getEvent(): CloudEvent
+    private function getEvent(): CloudEventImmutable
     {
-        return new CloudEvent(
+        return new CloudEventImmutable(
             'A234-1234-1234',
             'https://github.com/cloudevents/spec/pull',
             'com.github.pull_request.opened',

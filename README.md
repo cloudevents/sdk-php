@@ -60,7 +60,7 @@ $event = JsonDeserializer::create()->deserializeStructured($payload);
 $events = JsonDeserializer::create()->deserializeBatch($payload);
 ```
 
-## Marshal/Unmarchal a CloudEvent
+## Marshal/Unmarshal a CloudEvent
 
 ```php
 use CloudEvents\Http\Marshaller;

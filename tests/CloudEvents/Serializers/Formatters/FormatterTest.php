@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use ValueError;
 
 /**
- * @coversDefaultClass \CloudEvents\Serializers\Formmaters\Formatter
+ * @coversDefaultClass \CloudEvents\Serializers\Formatters\Formatter
  */
 class FormatterTest extends TestCase
 {

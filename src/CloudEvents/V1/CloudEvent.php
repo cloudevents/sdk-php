@@ -236,6 +236,14 @@ class CloudEvent implements CloudEventInterface
     }
 
     /**
+     * @return bool|int|string|null
+     */
+    public function getExtension(string $attribute)
+    {
+        return $this->extensions[$attribute] ?? null;
+    }
+
+    /**
      * @param array<string,bool|int|string|null> $extensions
      */
     public function setExtensions(array $extensions): CloudEvent

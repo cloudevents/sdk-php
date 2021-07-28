@@ -22,7 +22,7 @@ $ composer require cloudevents/sdk-php
 use CloudEvents\V1\CloudEvent;
 use CloudEvents\V1\CloudEventImmutable;
 
-// Immtuable CloudEvent
+// Immutable CloudEvent
 $immutableEvent = new CloudEventImmutable(
     '1n6bFxDMHZFChlI4TVI9tdzphB9',
     '/examples/php-sdk',

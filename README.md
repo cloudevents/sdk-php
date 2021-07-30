@@ -2,15 +2,13 @@
 
 ## Status
 
-This SDK is currently a work in progress, therefore things might (and will) break with every update.
-
-This SDK aims to supports the following versions of CloudEvents:
+This SDK currently supports the following versions of CloudEvents:
 
 - [v1.0](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md)
 
 ## Installation
 
-Install the SDK using [composer](https://getcomposer.org/):
+Install the SDK using [Composer](https://getcomposer.org/):
 
 ```sh
 $ composer require cloudevents/sdk-php

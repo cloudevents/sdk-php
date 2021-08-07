@@ -74,7 +74,7 @@ $request = Marshaller::createJsonMarshaller()->marshalStructuredResponse($event)
 $request = Marshaller::createJsonMarshaller()->marshalBinaryResponse($event);
 $request = Marshaller::createJsonMarshaller()->marshalBatchResponse($events);
 
-// UnMarshal HTTP message
+// Unmarshal HTTP message
 $events = Unmarshaller::createJsonUnmarshaller()->unmarshal($message);
 ```
 

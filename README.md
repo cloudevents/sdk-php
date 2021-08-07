@@ -64,17 +64,17 @@ $events = JsonDeserializer::create()->deserializeBatch($payload);
 use CloudEvents\Http\Marshaller;
 use CloudEvents\Http\Unmarshaller;
 
-// Marchal HTTP request
+// Marshal HTTP request
 $request = Marshaller::createJsonMarshaller()->marshalStructuredRequest($event);
 $request = Marshaller::createJsonMarshaller()->marshalBinaryRequest($event);
 $request = Marshaller::createJsonMarshaller()->marshalBatchRequest($events);
 
-// Marchal HTTP response
+// Marshal HTTP response
 $request = Marshaller::createJsonMarshaller()->marshalStructuredResponse($event);
 $request = Marshaller::createJsonMarshaller()->marshalBinaryResponse($event);
 $request = Marshaller::createJsonMarshaller()->marshalBatchResponse($events);
 
-// Unmarchal HTTP message
+// UnMarshal HTTP message
 $events = Unmarshaller::createJsonUnmarshaller()->unmarshal($message);
 ```
 

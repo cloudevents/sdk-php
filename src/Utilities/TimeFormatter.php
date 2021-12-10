@@ -16,6 +16,9 @@ final class TimeFormatter
     private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const TIME_ZONE = 'UTC';
 
+    private const RFC3339_FORMAT = 'Y-m-d\TH:i:sP';
+    private const RFC3339_EXTENDED_FORMAT = 'Y-m-d\TH:i:s.uP';
+
     public static function encode(?DateTimeImmutable $time): ?string
     {
         if ($time === null) {
@@ -31,7 +34,11 @@ final class TimeFormatter
             return null;
         }
 
-        $decoded = DateTimeImmutable::createFromFormat(self::TIME_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
+        $decoded = DateTimeImmutable::createFromFormat(
+            str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
+            strtoupper($time),
+            new DateTimeZone(self::TIME_ZONE)
+        );
 
         if ($decoded === false) {
             throw new ValueError(

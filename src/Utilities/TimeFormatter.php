@@ -35,8 +35,8 @@ final class TimeFormatter
         }
 
         $decoded = DateTimeImmutable::createFromFormat(
-            str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
-            strtoupper($time),
+            \str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
+            \strtoupper($time),
             new DateTimeZone(self::TIME_ZONE)
         );
 

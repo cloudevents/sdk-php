@@ -273,10 +273,6 @@ trait CloudEventTrait
             );
         }
 
-        /**
-         * @psalm-suppress UndefinedFunction
-         * @var string
-         */
         $type = \get_debug_type($value);
         $types = ['bool', 'int', 'string', 'null'];
 

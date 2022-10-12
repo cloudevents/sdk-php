@@ -1,11 +1,11 @@
 {
-    "name": "cloudevents/sdk-php",
-    "description": "CloudEvents SDK",
+    "name": "urbansportsclub/cloudevents-sdk-php",
+    "description": "USC PHP 7.3 SDK for CloudEvents",
     "type": "library",
     "license": "Apache-2.0",
     "support": {
-        "issues": "https://github.com/cloudevents/sdk-php/issues",
-        "source": "https://github.com/cloudevents/sdk-php"
+        "issues": "https://github.com/urbansportsclub/cloudevents-sdk-php/issues",
+        "source": "https://github.com/urbansportsclub/cloudevents-sdk-php"
     },
     "autoload": {
         "psr-4": {
@@ -18,7 +18,7 @@
         }
     },
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.3 || ^8.0",
         "ext-json": "*",
         "ext-pcre": "*",
         "symfony/polyfill-php80": "^1.17"

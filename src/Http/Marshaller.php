@@ -21,11 +21,11 @@ final class Marshaller implements MarshallerInterface
     /**
      * @var array{serializer: SerializerInterface, type: string}
      */
-    private array $configuration;
+    private $configuration;
 
-    private RequestFactoryInterface $requestFactory;
-    private ResponseFactoryInterface $responseFactory;
-    private StreamFactoryInterface $streamFactory;
+    private $requestFactory;
+    private $responseFactory;
+    private $streamFactory;
 
     /**
      * @param array{serializer: SerializerInterface, type: string} $configuration

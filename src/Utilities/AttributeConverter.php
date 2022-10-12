@@ -27,7 +27,9 @@ final class AttributeConverter
             'dataschema' => $cloudEvent->getDataSchema(),
             'subject' => $cloudEvent->getSubject(),
             'time' => TimeFormatter::encode($cloudEvent->getTime()),
-        ], fn ($attr) => $attr !== null);
+        ], function ($attr) {
+            return $attr !== null;
+        });
 
         return array_merge($attributes, $cloudEvent->getExtensions());
     }

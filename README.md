@@ -1,4 +1,6 @@
-# PHP SDK for [CloudEvents](https://github.com/cloudevents/spec)
+# USC PHP 7.3 SDK for [CloudEvents](https://github.com/cloudevents/spec)
+
+This SDK is a fork of CloudEvents PHP SDK version v1.0.1 with PHP code downgraded to be able to run on PHP 7.3
 
 ## Status
 
@@ -11,7 +13,7 @@ This SDK currently supports the following versions of CloudEvents:
 Install the SDK using [Composer](https://getcomposer.org/):
 
 ```sh
-$ composer require cloudevents/sdk-php
+$ composer require urbansportsclub/cloudevents-sdk-php
 ```
 
 ## Create a CloudEvent

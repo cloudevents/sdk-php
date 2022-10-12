@@ -18,7 +18,7 @@ final class Unmarshaller implements UnmarshallerInterface
     /**
      * @var array<string, array{deserializer: DeserializerInterface, contentTypes: list<string>}>
      */
-    private array $configuration;
+    private $configuration;
 
     /**
      * @param array<string, array{deserializer: DeserializerInterface, contentTypes: list<string>}> $configuration

@@ -10,25 +10,25 @@ use ValueError;
 
 trait CloudEventTrait
 {
-    private string $id;
+    private $id;
 
-    private string $source;
+    private $source;
 
-    private string $type;
+    private $type;
 
     /** @var mixed */
     private $data;
 
-    private ?string $dataContentType;
+    private $dataContentType;
 
-    private ?string $dataSchema;
+    private $dataSchema;
 
-    private ?string $subject;
+    private $subject;
 
-    private ?DateTimeImmutable $time;
+    private $time;
 
     /** @var array<string,bool|int|string> */
-    private array $extensions = [];
+    private $extensions = [];
 
     /**
      * @param mixed $data

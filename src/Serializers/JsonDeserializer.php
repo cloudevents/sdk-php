@@ -14,7 +14,7 @@ use JsonException;
 
 final class JsonDeserializer implements DeserializerInterface
 {
-    private DenormalizerInterface $denormalizer;
+    private $denormalizer;
 
     public function __construct(DenormalizerInterface $denormalizer)
     {

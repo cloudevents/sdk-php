@@ -92,18 +92,21 @@ final class Unmarshaller implements UnmarshallerInterface
         MessageInterface $message,
         DeserializerInterface $deserializer
     ): array {
+        /** @var array<array-key, list<string>> */
+        $headers = $message->getHeaders();
+
         /** @psalm-suppress MixedArgumentTypeCoercion */
         $cloudEvent = $deserializer->deserializeBinary(
             (string) $message->getBody(),
             implode(', ', $message->getHeader('Content-Type')),
-            self::decodeAttributes($message->getHeaders())
+            self::decodeAttributes($headers)
         );
 
         return [$cloudEvent];
     }
 
     /**
-     * @param array<string, list<string>> $headers
+     * @param array<array-key, list<string>> $headers
      *
      * @return array<string, string>
      */
@@ -112,6 +115,7 @@ final class Unmarshaller implements UnmarshallerInterface
         $attributes = [];
 
         foreach ($headers as $key => $values) {
+            $key = (string) $key;
             /** @psalm-suppress UndefinedFunction */
             if (\str_starts_with($key, 'ce-')) {
                 $attributes[substr($key, 3)] = implode(', ', $values);

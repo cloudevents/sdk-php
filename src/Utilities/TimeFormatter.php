@@ -34,6 +34,7 @@ final class TimeFormatter
             return null;
         }
 
+        /** @psalm-suppress UndefinedFunction */
         $decoded = DateTimeImmutable::createFromFormat(
             \str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
             \strtoupper($time),

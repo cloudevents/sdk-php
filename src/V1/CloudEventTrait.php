@@ -273,10 +273,12 @@ trait CloudEventTrait
             );
         }
 
+        /** @psalm-suppress UndefinedFunction */
         $type = \get_debug_type($value);
         $types = ['bool', 'int', 'string', 'null'];
 
         if (!in_array($type, $types, true)) {
+            /** @psalm-suppress MixedArgument */
             throw new TypeError(
                 \sprintf('%s(): Argument #2 ($value) must be of type %s, %s given', __METHOD__, implode('|', $types), $type)
             );

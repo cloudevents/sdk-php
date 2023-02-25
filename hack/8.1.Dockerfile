@@ -1,4 +1,4 @@
-FROM php:8.1.0beta1-alpine
+FROM php:8.1-alpine
 
 LABEL org.opencontainers.image.url="https://github.com/cloudevents/sdk-php/tree/master/hack/8.1.Dockerfile" \
       org.opencontainers.image.documentation="https://github.com/cloudevents/sdk-php/tree/master/hack/README.md" \

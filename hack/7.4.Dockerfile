@@ -1,7 +1,7 @@
 FROM php:7.4-alpine
 
-LABEL org.opencontainers.image.url="https://github.com/cloudevents/sdk-php/tree/master/hack/7.4.Dockerfile" \
-      org.opencontainers.image.documentation="https://github.com/cloudevents/sdk-php/tree/master/hack/README.md" \
+LABEL org.opencontainers.image.url="https://github.com/cloudevents/sdk-php/tree/main/hack/7.4.Dockerfile" \
+      org.opencontainers.image.documentation="https://github.com/cloudevents/sdk-php/tree/main/hack/README.md" \
       org.opencontainers.image.source="https://github.com/cloudevents/sdk-php" \
       org.opencontainers.image.vendor="CloudEvent" \
       org.opencontainers.image.title="PHP 7.4" \

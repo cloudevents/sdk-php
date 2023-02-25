@@ -4,7 +4,7 @@
 
 This SDK currently supports the following versions of CloudEvents:
 
-- [v1.0](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md)
+- [v1.0](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)
 
 ## Installation
 

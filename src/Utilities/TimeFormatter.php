@@ -16,9 +16,6 @@ final class TimeFormatter
     private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const TIME_ZONE = 'UTC';
 
-    private const RFC3339_FORMAT = 'Y-m-d\TH:i:sP';
-    private const RFC3339_EXTENDED_FORMAT = 'Y-m-d\TH:i:s.uP';
-
     public static function encode(?DateTimeImmutable $time): ?string
     {
         if ($time === null) {
@@ -34,19 +31,23 @@ final class TimeFormatter
             return null;
         }
 
-        /** @psalm-suppress UndefinedFunction */
-        $decoded = DateTimeImmutable::createFromFormat(
-            \str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
-            \strtoupper($time),
-            new DateTimeZone(self::TIME_ZONE)
-        );
-
-        if ($decoded === false) {
+        try {
+            $decoded = new DateTimeImmutable($time);
+        } catch (\Throwable $th) {
             throw new ValueError(
                 \sprintf('%s(): Argument #1 ($time) is not a valid RFC3339 timestamp', __METHOD__)
             );
         }
 
-        return $decoded;
+        return self::shiftWithTimezone($time, $decoded);
+    }
+
+    private static function shiftWithTimezone(string $time, DateTimeImmutable $datetime): DateTimeImmutable
+    {
+        if (strpos($time, '+') === false && strpos($time, '-') === false && strtoupper(substr($time, -1)) !== 'Z') {
+            return $datetime->setTimezone(new \DateTimeZone('UTC'));
+        }
+
+        return $datetime;
     }
 }

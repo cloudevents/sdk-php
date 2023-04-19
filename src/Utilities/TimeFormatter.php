@@ -31,6 +31,8 @@ final class TimeFormatter
             return null;
         }
 
+        $time = self::trimMicroseconds($time);
+
         try {
             $decoded = new DateTimeImmutable($time);
         } catch (\Throwable $th) {
@@ -42,9 +44,29 @@ final class TimeFormatter
         return self::shiftWithTimezone($time, $decoded);
     }
 
+    private static function trimMicroseconds(string $time): string
+    {
+        $microseconds = explode('.', $time, 2);
+        if (isset($microseconds[1])) {
+            $microsecondsAndTimezone = explode('+', $microseconds[1], 2);
+            if (count($microsecondsAndTimezone) === 1) {
+                $microsecondsAndTimezone = explode('-', $microseconds[1], 2);
+            }
+            $timezone = isset($microsecondsAndTimezone[1]) ? sprintf('+%s', $microsecondsAndTimezone[1]) : '';
+            $time = sprintf(
+                "%s.%s%s",
+                $microseconds[0],
+                substr($microsecondsAndTimezone[0], 0, 6),
+                $timezone
+            );
+        }
+
+        return $time;
+    }
+
     private static function shiftWithTimezone(string $time, DateTimeImmutable $datetime): DateTimeImmutable
     {
-        if (strpos($time, '+') === false && strpos($time, '-') === false && strtoupper(substr($time, -1)) !== 'Z') {
+        if (\strpos($time, '+') === false && \strpos($time, '-') === false && \strtoupper(\substr($time, -1)) !== 'Z') {
             return $datetime->setTimezone(new \DateTimeZone('UTC'));
         }
 

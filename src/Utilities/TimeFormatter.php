@@ -16,6 +16,9 @@ final class TimeFormatter
     private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const TIME_ZONE = 'UTC';
 
+    private const RFC3339_FORMAT = 'Y-m-d\TH:i:sP';
+    private const RFC3339_EXTENDED_FORMAT = 'Y-m-d\TH:i:s.uP';
+
     public static function encode(?DateTimeImmutable $time): ?string
     {
         if ($time === null) {
@@ -31,45 +34,19 @@ final class TimeFormatter
             return null;
         }
 
-        $time = self::trimMicroseconds($time);
+        /** @psalm-suppress UndefinedFunction */
+        $decoded = DateTimeImmutable::createFromFormat(
+            \str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
+            \strtoupper($time),
+            new DateTimeZone(self::TIME_ZONE)
+        );
 
-        try {
-            $decoded = new DateTimeImmutable($time);
-        } catch (\Throwable $th) {
+        if ($decoded === false) {
             throw new ValueError(
                 \sprintf('%s(): Argument #1 ($time) is not a valid RFC3339 timestamp', __METHOD__)
             );
         }
 
-        return self::shiftWithTimezone($time, $decoded);
-    }
-
-    private static function trimMicroseconds(string $time): string
-    {
-        $microseconds = explode('.', $time, 2);
-        if (isset($microseconds[1])) {
-            $microsecondsAndTimezone = explode('+', $microseconds[1], 2);
-            if (count($microsecondsAndTimezone) === 1) {
-                $microsecondsAndTimezone = explode('-', $microseconds[1], 2);
-            }
-            $timezone = isset($microsecondsAndTimezone[1]) ? sprintf('+%s', $microsecondsAndTimezone[1]) : '';
-            $time = sprintf(
-                "%s.%s%s",
-                $microseconds[0],
-                substr($microsecondsAndTimezone[0], 0, 6),
-                $timezone
-            );
-        }
-
-        return $time;
-    }
-
-    private static function shiftWithTimezone(string $time, DateTimeImmutable $datetime): DateTimeImmutable
-    {
-        if (\strpos($time, '+') === false && \strpos($time, '-') === false && \strtoupper(\substr($time, -1)) !== 'Z') {
-            return $datetime->setTimezone(new \DateTimeZone('UTC'));
-        }
-
-        return $datetime;
+        return $decoded;
     }
 }

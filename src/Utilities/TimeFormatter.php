@@ -54,10 +54,12 @@ final class TimeFormatter
     {
         [$fst, $snd] = explode('.', $time);
 
+        // match the first n digits at the start
         \preg_match('/^\d+/', $snd, $matches);
 
         $digits = $matches[0] ?? '';
 
+        // datetime portion + period + up to 6 digits + timezone string
         return $fst . '.' . substr($digits, 0, 6) . substr($snd, strlen($digits));
     }
 }

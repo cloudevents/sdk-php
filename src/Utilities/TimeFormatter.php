@@ -34,12 +34,12 @@ final class TimeFormatter
             return null;
         }
 
+        $time = \strtoupper($time);
+
         /** @psalm-suppress UndefinedFunction */
-        $decoded = DateTimeImmutable::createFromFormat(
-            \str_contains($time, '.') ? self::RFC3339_EXTENDED_FORMAT : self::RFC3339_FORMAT,
-            \strtoupper($time),
-            new DateTimeZone(self::TIME_ZONE)
-        );
+        $decoded = \str_contains($time, '.')
+            ? DateTimeImmutable::createFromFormat(self::RFC3339_EXTENDED_FORMAT, self::truncateOverPrecision($time), new DateTimeZone(self::TIME_ZONE))
+            : DateTimeImmutable::createFromFormat(self::RFC3339_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
 
         if ($decoded === false) {
             throw new ValueError(
@@ -48,5 +48,16 @@ final class TimeFormatter
         }
 
         return $decoded;
+    }
+
+    private static function truncateOverPrecision(string $time): string
+    {
+        [$fst, $snd] = explode('.', $time);
+
+        \preg_match('/^\d+/', $snd, $matches);
+
+        $digits = $matches[0] ?? '';
+
+        return $fst . '.' . substr($digits, 0, 6) . substr($snd, strlen($digits));
     }
 }

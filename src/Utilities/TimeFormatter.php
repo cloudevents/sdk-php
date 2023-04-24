@@ -16,6 +16,9 @@ final class TimeFormatter
     private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const TIME_ZONE = 'UTC';
 
+    private const RFC3339_FORMAT = 'Y-m-d\TH:i:sP';
+    private const RFC3339_EXTENDED_FORMAT = 'Y-m-d\TH:i:s.uP';
+
     public static function encode(?DateTimeImmutable $time): ?string
     {
         if ($time === null) {
@@ -31,45 +34,32 @@ final class TimeFormatter
             return null;
         }
 
-        $time = self::trimMicroseconds($time);
+        $time = \strtoupper($time);
 
-        try {
-            $decoded = new DateTimeImmutable($time);
-        } catch (\Throwable $th) {
+        /** @psalm-suppress UndefinedFunction */
+        $decoded = \str_contains($time, '.')
+            ? DateTimeImmutable::createFromFormat(self::RFC3339_EXTENDED_FORMAT, self::truncateOverPrecision($time), new DateTimeZone(self::TIME_ZONE))
+            : DateTimeImmutable::createFromFormat(self::RFC3339_FORMAT, $time, new DateTimeZone(self::TIME_ZONE));
+
+        if ($decoded === false) {
             throw new ValueError(
                 \sprintf('%s(): Argument #1 ($time) is not a valid RFC3339 timestamp', __METHOD__)
             );
         }
 
-        return self::shiftWithTimezone($time, $decoded);
+        return $decoded;
     }
 
-    private static function trimMicroseconds(string $time): string
+    private static function truncateOverPrecision(string $time): string
     {
-        $microseconds = explode('.', $time, 2);
-        if (isset($microseconds[1])) {
-            $microsecondsAndTimezone = explode('+', $microseconds[1], 2);
-            if (count($microsecondsAndTimezone) === 1) {
-                $microsecondsAndTimezone = explode('-', $microseconds[1], 2);
-            }
-            $timezone = isset($microsecondsAndTimezone[1]) ? sprintf('+%s', $microsecondsAndTimezone[1]) : '';
-            $time = sprintf(
-                "%s.%s%s",
-                $microseconds[0],
-                substr($microsecondsAndTimezone[0], 0, 6),
-                $timezone
-            );
-        }
+        [$fst, $snd] = explode('.', $time);
 
-        return $time;
-    }
+        // match the first n digits at the start
+        \preg_match('/^\d+/', $snd, $matches);
 
-    private static function shiftWithTimezone(string $time, DateTimeImmutable $datetime): DateTimeImmutable
-    {
-        if (\strpos($time, '+') === false && \strpos($time, '-') === false && \strtoupper(\substr($time, -1)) !== 'Z') {
-            return $datetime->setTimezone(new \DateTimeZone('UTC'));
-        }
+        $digits = $matches[0] ?? '';
 
-        return $datetime;
+        // datetime portion + period + up to 6 digits + timezone string
+        return $fst . '.' . substr($digits, 0, 6) . substr($snd, strlen($digits));
     }
 }

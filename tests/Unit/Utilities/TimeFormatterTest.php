@@ -19,10 +19,11 @@ class TimeFormatterTest extends TestCase
         );
     }
 
-    public static function providesDecodeCases(): array
+    public static function providesValidDecodeCases(): array
     {
         return [
             // UTC
+            ['2018-04-05T17:31:00Z', '2018-04-05t17:31:00Z'],
             ['2018-04-05T17:31:00Z', '2018-04-05T17:31:00Z'],
             ['1985-04-12T23:20:50.100000Z', '1985-04-12T23:20:50.1Z'],
             ['1985-04-12T23:20:50.100000Z', '1985-04-12T23:20:50.10Z'],
@@ -41,6 +42,7 @@ class TimeFormatterTest extends TestCase
             ['1985-04-12T23:20:50.123456Z', '1985-04-12T23:20:50.123456789Z'],
 
             // +01:00
+            ['2018-04-05T16:31:00Z', '2018-04-05t17:31:00+01:00'],
             ['2018-04-05T16:31:00Z', '2018-04-05T17:31:00+01:00'],
             ['1985-04-12T22:20:50.100000Z', '1985-04-12T23:20:50.1+01:00'],
             ['1985-04-12T22:20:50.100000Z', '1985-04-12T23:20:50.10+01:00'],
@@ -57,12 +59,17 @@ class TimeFormatterTest extends TestCase
             ['1985-04-12T22:20:50.123456Z', '1985-04-12T23:20:50.1234567+01:00'],
             ['1985-04-12T22:20:50.123456Z', '1985-04-12T23:20:50.12345678+01:00'],
             ['1985-04-12T22:20:50.123456Z', '1985-04-12T23:20:50.123456789+01:00'],
-            ['1985-04-12T22:20:50.123456Z', '1985-04-12T23:20:50.1234567890+01:00'],
+
+            // -05:00
+            ['2018-04-05T22:31:00Z', '2018-04-05t17:31:00-05:00'],
+            ['2018-04-05T22:31:00Z', '2018-04-05T17:31:00-05:00'],
+            ['1985-04-13T04:20:50.123456Z', '1985-04-12T23:20:50.123456-05:00'],
+            ['1985-04-13T04:20:50.123456Z', '1985-04-12T23:20:50.123456789-05:00'],
         ];
     }
 
     /**
-     * @dataProvider providesDecodeCases
+     * @dataProvider providesValidDecodeCases
      */
     public function testDecode(string $expected, string $input): void
     {
@@ -88,7 +95,23 @@ class TimeFormatterTest extends TestCase
         );
     }
 
-    public function testDecodeInvalidTime(): void
+    public static function providesInvalidDecodeCases(): array
+    {
+        return [
+            [''],
+            ['123'],
+            ['2018asdsdsafd'],
+            ['2018-04-05'],
+            ['2018-04-05 17:31:00Z'],
+            ['2018-04-05T17:31:00.Z'],
+            ['2018-04-05T17:31:00ZZ'],
+        ];
+    }
+
+    /**
+     * @dataProvider providesInvalidDecodeCases
+     */
+    public function testDecodeInvalidTime(string $input): void
     {
         $this->expectException(ValueError::class);
 
@@ -96,6 +119,6 @@ class TimeFormatterTest extends TestCase
             'CloudEvents\\Utilities\\TimeFormatter::decode(): Argument #1 ($time) is not a valid RFC3339 timestamp'
         );
 
-        TimeFormatter::decode('2018asdsdsafd');
+        TimeFormatter::decode($input);
     }
 }

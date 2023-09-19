@@ -37,7 +37,7 @@ final class JsonSerializer implements SerializerInterface
 
         $normalized = $this->normalizer->normalize($cloudEvent, false);
 
-        return json_encode($normalized);
+        return json_encode($normalized, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -57,7 +57,7 @@ final class JsonSerializer implements SerializerInterface
             $normalized[] = $this->normalizer->normalize($cloudEvent, false);
         }
 
-        return json_encode($normalized);
+        return json_encode($normalized, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -74,7 +74,7 @@ final class JsonSerializer implements SerializerInterface
         $normalized = $this->normalizer->normalize($cloudEvent, true);
 
         /** @var string */
-        $data = json_encode($normalized['data']);
+        $data = json_encode($normalized['data'], JSON_THROW_ON_ERROR);
         unset($normalized['data']);
 
         /** @var string */

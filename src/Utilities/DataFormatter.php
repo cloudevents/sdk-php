@@ -49,11 +49,7 @@ final class DataFormatter
             return $decoded;
         }
 
-        if (isset($data['data'])) {
-            return $data['data'];
-        }
-
-        return null;
+        return $data['data'] ?? null;
     }
 
     /**

@@ -117,3 +117,10 @@ how SDK projects are
 for how PR reviews and approval, and our
 [Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md)
 information.
+
+## Additional SDK Resources
+
+- [List of current active maintainers](MAINTAINERS.md)
+- [How to contribute to the project](CONTRIBUTING.md)
+- [SDK's License](LICENSE)
+- [SDK's Release process](RELEASING.md)

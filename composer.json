@@ -48,13 +48,15 @@
             "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:7.4-tests -f hack/7.4.Dockerfile hack",
             "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.0-tests -f hack/8.0.Dockerfile hack",
             "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.1-tests -f hack/8.1.Dockerfile hack",
-            "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.2-tests -f hack/8.1.Dockerfile hack"
+            "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.2-tests -f hack/8.1.Dockerfile hack",
+            "DOCKER_BUILDKIT=1 docker build -t cloudevents/sdk-php:8.3-tests -f hack/8.1.Dockerfile hack"
         ],
         "tests-docker": [
             "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:7.4-tests --coverage-html=coverage",
             "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.0-tests",
             "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.1-tests",
-            "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.2-tests"
+            "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.2-tests",
+            "docker run -it -v $(pwd):/var/www cloudevents/sdk-php:8.3-tests"
         ]
     },
     "scripts-descriptions": {

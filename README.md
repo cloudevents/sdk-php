@@ -118,6 +118,10 @@ for how PR reviews and approval, and our
 [Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md)
 information.
 
+If there is a security concern with one of the CloudEvents specifications, or
+with one of the project's SDKs, please send an email to
+[cncf-cloudevents-security@lists.cncf.io](mailto:cncf-cloudevents-security@lists.cncf.io).
+
 ## Additional SDK Resources
 
 - [List of current active maintainers](MAINTAINERS.md)

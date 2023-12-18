@@ -13,9 +13,11 @@ use CloudEvents\V1\CloudEventInterface;
 final class AttributeConverter
 {
     /**
+     * @param array{subsecondPrecision?: int<0, 6>} $configuration
+     *
      * @return array<string, bool|int|string>
      */
-    public static function toArray(CloudEventInterface $cloudEvent): array
+    public static function toArray(CloudEventInterface $cloudEvent, array $configuration): array
     {
         /** @var array<string, bool|int|string> */
         $attributes = array_filter([
@@ -26,7 +28,7 @@ final class AttributeConverter
             'datacontenttype' => $cloudEvent->getDataContentType(),
             'dataschema' => $cloudEvent->getDataSchema(),
             'subject' => $cloudEvent->getSubject(),
-            'time' => TimeFormatter::encode($cloudEvent->getTime()),
+            'time' => TimeFormatter::encode($cloudEvent->getTime(), $configuration['subsecondPrecision'] ?? 0),
         ], fn ($attr) => $attr !== null);
 
         return array_merge($attributes, $cloudEvent->getExtensions());

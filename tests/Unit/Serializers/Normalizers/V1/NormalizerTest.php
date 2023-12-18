@@ -80,4 +80,40 @@ class NormalizerTest extends TestCase
             $formatter->normalize($event, false)
         );
     }
+
+    public function testNormalizerWithSubsecondPrecisionConfiguration(): void
+    {
+        /** @var CloudEventInterface|Stub $event */
+        $event = $this->createStub(CloudEventInterface::class);
+        $event->method('getSpecVersion')->willReturn('1.0');
+        $event->method('getId')->willReturn('1234-1234-1234');
+        $event->method('getSource')->willReturn('/var/data');
+        $event->method('getType')->willReturn('com.example.someevent');
+        $event->method('getDataContentType')->willReturn('application/json');
+        $event->method('getDataSchema')->willReturn('com.example/schema');
+        $event->method('getSubject')->willReturn('larger-context');
+        $event->method('getTime')->willReturn(new DateTimeImmutable('2018-04-05T17:31:00.123456Z'));
+        $event->method('getData')->willReturn(['key' => 'value']);
+        $event->method('getExtensions')->willReturn(['comacme' => 'foo']);
+
+        $formatter = new Normalizer(['subsecondPrecision' => 3]);
+
+        self::assertSame(
+            [
+                'specversion' => '1.0',
+                'id' => '1234-1234-1234',
+                'source' => '/var/data',
+                'type' => 'com.example.someevent',
+                'datacontenttype' => 'application/json',
+                'dataschema' => 'com.example/schema',
+                'subject' => 'larger-context',
+                'time' => '2018-04-05T17:31:00.123Z',
+                'comacme' => 'foo',
+                'data' => [
+                    'key' => 'value',
+                ],
+            ],
+            $formatter->normalize($event, false)
+        );
+    }
 }

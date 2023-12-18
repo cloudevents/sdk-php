@@ -11,11 +11,27 @@ use ValueError;
 
 class TimeFormatterTest extends TestCase
 {
-    public function testEncode(): void
+    public static function providesValidEncodeCases(): array
+    {
+        return [
+            ['2018-04-05T17:31:00Z', '2018-04-05T17:31:00.123456Z', 0],
+            ['2018-04-05T17:31:00.1Z', '2018-04-05T17:31:00.123456Z', 1],
+            ['2018-04-05T17:31:00.12Z', '2018-04-05T17:31:00.123456Z', 2],
+            ['2018-04-05T17:31:00.123Z', '2018-04-05T17:31:00.123456Z', 3],
+            ['2018-04-05T17:31:00.1234Z', '2018-04-05T17:31:00.123456Z', 4],
+            ['2018-04-05T17:31:00.12345Z', '2018-04-05T17:31:00.123456Z', 5],
+            ['2018-04-05T17:31:00.123456Z', '2018-04-05T17:31:00.123456Z', 6],
+        ];
+    }
+
+    /**
+     * @dataProvider providesValidEncodeCases
+     */
+    public function testEncode(string $expected, string $input, int $subsecondPrecision): void
     {
         self::assertEquals(
-            '2018-04-05T17:31:00Z',
-            TimeFormatter::encode(new DateTimeImmutable('2018-04-05T17:31:00Z'))
+            $expected,
+            TimeFormatter::encode(new DateTimeImmutable($input), $subsecondPrecision)
         );
     }
 
@@ -83,7 +99,7 @@ class TimeFormatterTest extends TestCase
     {
         self::assertEquals(
             null,
-            TimeFormatter::encode(null)
+            TimeFormatter::encode(null, 0)
         );
     }
 

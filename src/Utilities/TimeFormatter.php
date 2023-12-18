@@ -13,19 +13,41 @@ use ValueError;
  */
 final class TimeFormatter
 {
-    private const TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
+    private const TIME_FORMAT = 'Y-m-d\TH:i:s';
+    private const TIME_FORMAT_EXTENDED = 'Y-m-d\TH:i:s.u';
     private const TIME_ZONE = 'UTC';
 
     private const RFC3339_FORMAT = 'Y-m-d\TH:i:sP';
     private const RFC3339_EXTENDED_FORMAT = 'Y-m-d\TH:i:s.uP';
 
-    public static function encode(?DateTimeImmutable $time): ?string
+    /**
+     * @param int<0, 6> $subsecondPrecision
+     */
+    public static function encode(?DateTimeImmutable $time, int $subsecondPrecision): ?string
     {
         if ($time === null) {
             return null;
         }
 
-        return $time->setTimezone(new DateTimeZone(self::TIME_ZONE))->format(self::TIME_FORMAT);
+        return sprintf('%sZ', self::encodeWithoutTimezone($time, $subsecondPrecision));
+    }
+
+    /**
+     * @param int<0, 6> $subsecondPrecision
+     */
+    private static function encodeWithoutTimezone(DateTimeImmutable $time, int $subsecondPrecision): string
+    {
+        $utcTime = $time->setTimezone(new DateTimeZone(self::TIME_ZONE));
+
+        if ($subsecondPrecision <= 0) {
+            return $utcTime->format(self::TIME_FORMAT);
+        }
+
+        if ($subsecondPrecision >= 6) {
+            return $utcTime->format(self::TIME_FORMAT_EXTENDED);
+        }
+
+        return substr($utcTime->format(self::TIME_FORMAT_EXTENDED), 0, $subsecondPrecision - 6);
     }
 
     public static function decode(?string $time): ?DateTimeImmutable

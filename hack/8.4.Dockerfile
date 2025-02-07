@@ -1,11 +1,11 @@
-FROM php:8.3-alpine
+FROM php:8.4-alpine
 
-LABEL org.opencontainers.image.url="https://github.com/cloudevents/sdk-php/tree/main/hack/8.3.Dockerfile" \
+LABEL org.opencontainers.image.url="https://github.com/cloudevents/sdk-php/tree/main/hack/8.4.Dockerfile" \
       org.opencontainers.image.documentation="https://github.com/cloudevents/sdk-php/tree/main/hack/README.md" \
       org.opencontainers.image.source="https://github.com/cloudevents/sdk-php" \
       org.opencontainers.image.vendor="CloudEvent" \
-      org.opencontainers.image.title="PHP 8.3" \
-      org.opencontainers.image.description="PHP 8.3 test environment for cloudevents/sdk-php"
+      org.opencontainers.image.title="PHP 8.4" \
+      org.opencontainers.image.description="PHP 8.4 test environment for cloudevents/sdk-php"
 
 COPY --chown=www-data:www-data install-composer /usr/local/bin/install-composer
 RUN chmod +x /usr/local/bin/install-composer \

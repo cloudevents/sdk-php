@@ -43,9 +43,9 @@ final class Marshaller implements MarshallerInterface
     }
 
     public static function createJsonMarshaller(
-        RequestFactoryInterface $requestFactory = null,
-        ResponseFactoryInterface $responseFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        ?RequestFactoryInterface $requestFactory = null,
+        ?ResponseFactoryInterface $responseFactory = null,
+        ?StreamFactoryInterface $streamFactory = null
     ): self {
         return new self(
             ['serializer' => JsonSerializer::create(), 'type' => 'json'],

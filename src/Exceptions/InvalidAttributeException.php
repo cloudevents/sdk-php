@@ -10,9 +10,9 @@ use Throwable;
 class InvalidAttributeException extends Exception
 {
     public function __construct(
-        string $message = null,
+        ?string $message = null,
         int $code = 0,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($message ?? 'Invalid CloudEvent attribute.', $code, $previous);
     }

@@ -11,7 +11,7 @@ This SDK currently supports the following versions of CloudEvents:
 Install the SDK using [Composer](https://getcomposer.org/):
 
 ```sh
-$ composer require cloudevents/sdk-php
+composer require cloudevents/sdk-php
 ```
 
 ## Create a CloudEvent

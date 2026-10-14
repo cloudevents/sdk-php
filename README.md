@@ -22,19 +22,29 @@ use CloudEvents\V1\CloudEventImmutable;
 
 // Immutable CloudEvent
 $immutableEvent = new CloudEventImmutable(
+    # Event ID
     '1n6bFxDMHZFChlI4TVI9tdzphB9',
+    # Event source
     '/examples/php-sdk',
+    # Event type
     'com.example.type',
+    # Data attached to event
     ['example' => 'first-event'],
+    # mime-type of extra data
     'application/json'
 );
 
 // Mutable CloudEvent
 $mutableEvent = new CloudEvent(
+    # Event ID
     '1n6bFxDMHZFChlI4TVI9tdzphB9',
+    # Event source
     '/examples/php-sdk',
+    # Event type
     'com.example.type',
+    # Data attached to event
     ['example' => 'first-event'],
+    # mime-type of extra data
     'application/json'
 );
 
